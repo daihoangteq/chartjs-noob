@@ -1,8 +1,19 @@
+import { useEffect } from "react";
 import "./App.css";
 import { Center } from "./components/Center";
 import { LeftChart } from "./components/FinancialChart";
+import { calculateDualYAxisTicks, sampleData } from "./utils";
 
 function App() {
+  useEffect(() => {
+    calculateDualYAxisTicks(
+      [
+        ...sampleData.map((item) => item.income),
+        ...sampleData.map((item) => item.expenses),
+      ],
+      sampleData.map((item) => item.assets)
+    );
+  }, []);
   return (
     <h1 className="h-screen">
       <div className="relative max-w-[800px] mx-auto">

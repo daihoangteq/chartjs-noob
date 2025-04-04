@@ -39,7 +39,6 @@ const roundedLabelsPlugin: Plugin = {
     ctx.textBaseline = "middle";
 
     yAxis.ticks.forEach((tick) => {
-
       const tickLabel = yAxis.getLabelForValue(tick.value);
 
       // Calculate text width
@@ -54,8 +53,8 @@ const roundedLabelsPlugin: Plugin = {
       const labelX = yAxis.left - padding; // Move left by padding amount
 
       ctx.save();
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.05)'; // 80% opacity for blur
-      ctx.shadowBlur = 0.1;  // Adjust blur amount
+      ctx.shadowColor = "rgba(0, 0, 0, 0.05)"; // 80% opacity for blur
+      ctx.shadowBlur = 0.1; // Adjust blur amount
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 0;
       ctx.fillStyle = "#FFFFFFCC"; // Your background color
@@ -153,11 +152,15 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         },
       },
       y: {
-        type: "linear" as const,
+        beginAtZero:true,
+        // type: "linear" as const,
         display: true,
         min: 0,
         max: calculateDualYAxisTicks(
-          sampleData.map((item) => item.income),
+          [
+            ...sampleData.map((item) => item.income),
+            ...sampleData.map((item) => item.expenses),
+          ],
           sampleData.map((item) => item.assets)
         ).leftAxis.max,
         grid: {
@@ -175,7 +178,10 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
             size: 12,
           },
           stepSize: calculateDualYAxisTicks(
-            sampleData.map((item) => item.income),
+            [
+              ...sampleData.map((item) => item.income),
+              ...sampleData.map((item) => item.expenses),
+            ],
             sampleData.map((item) => item.assets)
           ).leftAxis.stepSize,
           padding: 20,
@@ -185,7 +191,8 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         },
       },
       y1: {
-        type: "linear" as const,
+        beginAtZero:true,
+        // type: "linear" as const,
         display: false,
         position: "right" as const,
         title: {
@@ -193,9 +200,12 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         },
         min: 0,
         max: calculateDualYAxisTicks(
-          sampleData.map((item) => item.income),
+          [
+            ...sampleData.map((item) => item.income),
+            ...sampleData.map((item) => item.expenses),
+          ],
           sampleData.map((item) => item.assets)
-        ).rightAxis.max,
+        ).rightAxis.max / 2,
         grid: {
           display: false,
         },
@@ -206,9 +216,12 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
             size: 12,
           },
           stepSize: calculateDualYAxisTicks(
-            sampleData.map((item) => item.income),
+            [
+              ...sampleData.map((item) => item.income),
+              ...sampleData.map((item) => item.expenses),
+            ],
             sampleData.map((item) => item.assets)
-          ).rightAxis.stepSize,
+          ).rightAxis.stepSize / 2,
           padding: 10,
           callback: function (value) {
             return value;
@@ -232,7 +245,6 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
     </div>
   );
 };
-
 
 // Example usage
 export const LeftChart: React.FC = () => {

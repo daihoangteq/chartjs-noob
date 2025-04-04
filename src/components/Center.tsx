@@ -94,11 +94,15 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         },
       },
       y: {
-        type: "linear" as const,
+        beginAtZero: true,
+        // type: "linear" as const,
         display: true,
         min: 0,
         max: calculateDualYAxisTicks(
-          sampleData.map((item) => item.income),
+          [
+            ...sampleData.map((item) => item.income),
+            ...sampleData.map((item) => item.expenses),
+          ],
           sampleData.map((item) => item.assets)
         ).leftAxis.max,
         grid: {
@@ -117,7 +121,10 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
             size: 12,
           },
           stepSize: calculateDualYAxisTicks(
-            sampleData.map((item) => item.income),
+            [
+              ...sampleData.map((item) => item.income),
+              ...sampleData.map((item) => item.expenses),
+            ],
             sampleData.map((item) => item.assets)
           ).leftAxis.stepSize,
           padding: 20,
@@ -127,6 +134,7 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         },
       },
       y1: {
+        beginAtZero: true,
         type: "linear" as const,
         display: true,
         position: "right" as const,
@@ -135,14 +143,17 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         },
         min: 0,
         max: calculateDualYAxisTicks(
-          sampleData.map((item) => item.income),
+          [
+            ...sampleData.map((item) => item.income),
+            ...sampleData.map((item) => item.expenses),
+          ],
           sampleData.map((item) => item.assets)
-        ).rightAxis.max,
+        ).rightAxis.max / 2,
         grid: {
           drawBorder: false,
         },
         ticks: {
-        //   display: false,
+          //   display: false,
           maxTicksLimit: 8,
           backdropColor: "#030303",
           color: "#F7374F",
@@ -150,9 +161,12 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
             size: 12,
           },
           stepSize: calculateDualYAxisTicks(
-            sampleData.map((item) => item.income),
+            [
+              ...sampleData.map((item) => item.income),
+              ...sampleData.map((item) => item.expenses),
+            ],
             sampleData.map((item) => item.assets)
-          ).rightAxis.stepSize,
+          ).rightAxis.stepSize / 2,
           padding: 10,
           callback: function (value) {
             return value;
@@ -176,8 +190,6 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
     </div>
   );
 };
-
-
 
 // Example usage
 export const Center: React.FC = () => {
