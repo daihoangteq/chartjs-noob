@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, ChartOptions, ChartData, Plugin } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { calculateDualYAxisTicks, sampleData } from "../utils";
+import 'chart.js/auto'; // ADD THIS
+
 
 // Register ChartJS components
 // ChartJS.register(
@@ -38,27 +40,33 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         borderColor: "#8833FF",
         backgroundColor: "#8833FF",
         yAxisID: "y1",
-        tension: 0.4,
+        tension: .4,
+        borderCapStyle: "round",
         borderWidth: 5,
         pointRadius: 0,
+        pointHoverRadius: 0,
       },
       {
         type: "bar" as const,
         label: "支出",
         data: data.map((item) => item.expenses),
-        backgroundColor: "#2196F3",
+        backgroundColor: "#00C75D",
         yAxisID: "y",
-        borderRadius: 4,
-        barThickness: 20,
+        categoryPercentage: .6,
+        borderRadius: 2,
+        barPercentage: .8,
+        hoverBackgroundColor: "#00C75D",
       },
       {
         type: "bar" as const,
         label: "収入",
         data: data.map((item) => item.income),
-        backgroundColor: "#4CAF50",
+        backgroundColor: "#56CCF2",
         yAxisID: "y",
-        borderRadius: 4,
-        barThickness: 20,
+        categoryPercentage: .6,
+        borderRadius: 2,
+        barPercentage: .8,
+        hoverBackgroundColor: "#56CCF2",
       },
     ],
   };
@@ -76,21 +84,22 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         left: 0,
         right: 0,
         top: 30,
-        bottom: 50,
+        bottom: 10,
       },
     },
     scales: {
       x: {
         display: true,
         grid: {
-          display: false,
+          drawOnChartArea: false,
+          offset: false
         },
         ticks: {
           color: "#666",
           font: {
             size: 12,
           },
-          padding: 5,
+          padding:5,
         },
       },
       y: {
@@ -148,12 +157,12 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
             ...sampleData.map((item) => item.expenses),
           ],
           sampleData.map((item) => item.assets)
-        ).rightAxis.max / 2,
+        ).rightAxis.max,
         grid: {
           drawBorder: false,
         },
         ticks: {
-          //   display: false,
+            display: false,
           maxTicksLimit: 8,
           backdropColor: "#030303",
           color: "#F7374F",
@@ -166,7 +175,7 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
               ...sampleData.map((item) => item.expenses),
             ],
             sampleData.map((item) => item.assets)
-          ).rightAxis.stepSize / 2,
+          ).rightAxis.stepSize,
           padding: 10,
           callback: function (value) {
             return value;
@@ -183,10 +192,13 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
       },
     },
   };
-
+  const [key, setKey] = useState(0);
+  useEffect(() => {
+    setKey((key) => key++);
+  }, []);
   return (
-    <div className="w-full max-w-[800px] h-[400px] mx-auto relative p-5 bg-transparent rounded-lg">
-      <Bar key={"center"} data={chartData} options={options} />
+    <div className="w-full h-full">
+      <Bar key={`${key}-centerChart`} data={chartData} options={options} />
     </div>
   );
 };

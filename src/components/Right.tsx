@@ -1,19 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ChartOptions, ChartData, Plugin } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { calculateDualYAxisTicks, sampleData } from "../utils";
-
-// Register ChartJS components
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   LineElement,
-//   PointElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
+import "chart.js/auto"; // ADD THIS
 
 export interface FinancialData {
   age: number;
@@ -24,63 +13,75 @@ export interface FinancialData {
 
 interface FinancialChartProps {
   data: FinancialData[];
+  setRightSize: (size: number) => void;
 }
 
 type ChartType = "bar" | "line";
 // Define the custom plugin for rounded labels
-const roundedLabelsPlugin: Plugin = {
-  id: "roundedLabels",
-  beforeDraw(chart) {
-    const ctx = chart.ctx;
-    const yAxis = chart.scales.y;
 
-    ctx.font = chart.ctx.font || "12px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+export const RightChart: React.FC<FinancialChartProps> = ({
+  data,
+  setRightSize,
+}) => {
+  const roundedLabelsPlugin: Plugin = {
+    id: "roundedLabels",
+    beforeDraw(chart) {
+      const ctx = chart.ctx;
+      const yAxis = chart.scales.y1;
 
-    yAxis.ticks.forEach((tick) => {
-      const tickLabel = yAxis.getLabelForValue(tick.value);
-
-      // Calculate text width
-      const textMetrics = ctx.measureText(tickLabel);
+      ctx.font = chart.ctx.font || "12px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      let maxTextWidth = 0;
       const padding = 10;
-      const textWidth = textMetrics.width + padding * 2;
-
-      const labelY = yAxis.getPixelForValue(tick.value);
-      const boxHeight = 20;
-
-      // Adjust x position to align right
-      const labelX = yAxis.left - padding; // Move left by padding amount
-
-      ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.05)"; // 80% opacity for blur
-      ctx.shadowBlur = 0.1; // Adjust blur amount
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-      ctx.fillStyle = "#FFFFFFCC"; // Your background color
-      ctx.beginPath();
-      ctx.roundRect(
-        labelX - textWidth, // Position rectangle to the left of the axis
-        labelY - boxHeight / 2,
-        textWidth,
-        boxHeight,
-        10
-      );
-      ctx.fill();
-
-      // Adjust text position
-      ctx.fillStyle = "#9747FF"; // Text color
-      ctx.fillText(
-        tickLabel,
-        labelX - textWidth / 2, // Center text in box
-        labelY
-      );
-      ctx.restore();
-    });
-  },
-};
-
-export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
+      yAxis.ticks.forEach((tick, index) => {
+        if (index === 0) return;
+        const tickLabel = yAxis.getLabelForValue(tick.value);
+        // Calculate text width
+        const textMetrics = ctx.measureText(tickLabel);
+        const textWidth = textMetrics.width + padding * 2;
+        if (textWidth > maxTextWidth) {
+          maxTextWidth = textWidth;
+        }
+      });
+      const widthOfChart = maxTextWidth + 10;
+      chart.canvas.style.width = widthOfChart + "px";
+      setRightSize(Math.floor(widthOfChart));
+      yAxis.ticks.forEach((tick, index) => {
+        if(index === 0) return 
+        const tickLabel = yAxis.getLabelForValue(tick.value);
+        const textMetrics = ctx.measureText(tickLabel);
+        const textWidth = textMetrics.width + padding * 2;
+        const labelY = yAxis.getPixelForValue(tick.value);
+        const boxHeight = 20;
+        // Adjust x position to align left
+        const labelX = yAxis.right; // Move left by padding amount
+        ctx.save();
+        ctx.shadowColor = "rgba(0, 0, 0, 0.02)";
+        ctx.shadowBlur = 0.1; // Adjust blur amount
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.fillStyle = "#FFFFFFCC"; // Your background color
+        ctx.beginPath();
+        ctx.roundRect(
+          labelX, // Position rectangle to the left of the axis
+          labelY - boxHeight / 2,
+          textWidth,
+          boxHeight,
+          10
+        );
+        ctx.fill();
+        // Adjust text position
+        ctx.fillStyle = "#9747FF"; // Text color
+        ctx.fillText(
+          tickLabel,
+          labelX + textWidth / 2, // Center text in box
+          labelY
+        );
+        ctx.restore();
+      });
+    },
+  };
   const chartData: ChartData<ChartType> = {
     labels: data.map((item) => item.age.toString()),
     datasets: [
@@ -128,16 +129,17 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
     },
     layout: {
       padding: {
-        left: 100,
-        right: 0,
+        left: 0,
+        right: 100,
         top: 30,
-        bottom: 51,
+        bottom: 10,
       },
     },
     scales: {
       x: {
         display: true,
         grid: {
+          drawBorder: false,
           display: false,
         },
         ticks: {
@@ -152,7 +154,7 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         },
       },
       y: {
-        beginAtZero:true,
+        beginAtZero: true,
         // type: "linear" as const,
         display: true,
         min: 0,
@@ -191,7 +193,7 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         },
       },
       y1: {
-        beginAtZero:true,
+        beginAtZero: true,
         // type: "linear" as const,
         display: false,
         position: "right" as const,
@@ -199,13 +201,14 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
           display: false,
         },
         min: 0,
-        max: calculateDualYAxisTicks(
-          [
-            ...sampleData.map((item) => item.income),
-            ...sampleData.map((item) => item.expenses),
-          ],
-          sampleData.map((item) => item.assets)
-        ).rightAxis.max / 2,
+        max:
+          calculateDualYAxisTicks(
+            [
+              ...sampleData.map((item) => item.income),
+              ...sampleData.map((item) => item.expenses),
+            ],
+            sampleData.map((item) => item.assets)
+          ).rightAxis.max,
         grid: {
           display: false,
         },
@@ -215,13 +218,14 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
           font: {
             size: 12,
           },
-          stepSize: calculateDualYAxisTicks(
-            [
-              ...sampleData.map((item) => item.income),
-              ...sampleData.map((item) => item.expenses),
-            ],
-            sampleData.map((item) => item.assets)
-          ).rightAxis.stepSize / 2,
+          stepSize:
+            calculateDualYAxisTicks(
+              [
+                ...sampleData.map((item) => item.income),
+                ...sampleData.map((item) => item.expenses),
+              ],
+              sampleData.map((item) => item.assets)
+            ).rightAxis.stepSize,
           padding: 10,
           callback: function (value) {
             return value;
@@ -238,15 +242,19 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
       },
     },
   };
-
+  const [key, setKey] = useState(0);
+  useEffect(() => {
+    setKey((key) => key++);
+  }, []);
   return (
-    <div className="w-full max-w-[800px] h-[400px] mx-auto relative p-5 bg-transparent rounded-lg">
-      <Bar data={chartData} options={options} plugins={[roundedLabelsPlugin]} />
+    <div className="w-full h-full">
+      <Bar
+        key={`${key}-rightChart`}
+        data={chartData}
+        options={options}
+        plugins={[roundedLabelsPlugin]}
+      />
     </div>
   );
 };
 
-// Example usage
-export const LeftChart: React.FC = () => {
-  return <FinancialChart data={sampleData} />;
-};
