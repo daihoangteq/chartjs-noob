@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Chart as ChartJS, ChartOptions, ChartData, Plugin } from "chart.js";
+import { Chart as ChartJS, ChartOptions, ChartData } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { calculateDualYAxisTicks, sampleData } from "../utils";
-import 'chart.js/auto'; // ADD THIS
+import "chart.js/auto"; // ADD THIS
+import { calculateDualYAxisTicks, sampleData } from "../../utils";
+import { customContentTooltip, tooltipTrick } from "./util";
 
-
-// Register ChartJS components
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   LineElement,
-//   PointElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
 
 interface FinancialData {
   age: number;
@@ -30,6 +19,7 @@ interface FinancialChartProps {
 
 type ChartType = "bar" | "line";
 export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
+
   const chartData: ChartData<ChartType> = {
     labels: data.map((item) => item.age.toString()),
     datasets: [
@@ -40,7 +30,7 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         borderColor: "#8833FF",
         backgroundColor: "#8833FF",
         yAxisID: "y1",
-        tension: .4,
+        tension: 0.4,
         borderCapStyle: "round",
         borderWidth: 5,
         pointRadius: 0,
@@ -52,9 +42,9 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         data: data.map((item) => item.expenses),
         backgroundColor: "#00C75D",
         yAxisID: "y",
-        categoryPercentage: .6,
+        categoryPercentage: 0.6,
         borderRadius: 2,
-        barPercentage: .8,
+        barPercentage: 0.8,
         hoverBackgroundColor: "#00C75D",
       },
       {
@@ -63,14 +53,13 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         data: data.map((item) => item.income),
         backgroundColor: "#56CCF2",
         yAxisID: "y",
-        categoryPercentage: .6,
+        categoryPercentage: 0.6,
         borderRadius: 2,
-        barPercentage: .8,
+        barPercentage: 0.8,
         hoverBackgroundColor: "#56CCF2",
       },
     ],
   };
-
   const options: ChartOptions<ChartType> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -92,14 +81,14 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
         display: true,
         grid: {
           drawOnChartArea: false,
-          offset: false
+          offset: false,
         },
         ticks: {
           color: "#666",
           font: {
             size: 12,
           },
-          padding:5,
+          padding: 5,
         },
       },
       y: {
@@ -162,7 +151,7 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
           drawBorder: false,
         },
         ticks: {
-            display: false,
+          display: false,
           maxTicksLimit: 8,
           backdropColor: "#030303",
           color: "#F7374F",
@@ -186,19 +175,20 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ data }) => {
     plugins: {
       tooltip: {
         enabled: false,
+        // external: customContentTooltip,
       },
       legend: {
         display: false,
       },
     },
   };
-  const [key, setKey] = useState(0);
-  useEffect(() => {
-    setKey((key) => key++);
-  }, []);
   return (
-    <div className="w-full h-full">
-      <Bar key={`${key}-centerChart`} data={chartData} options={options} />
+    <div className="w-full h-[354px]" id="hehe" >
+      <Bar
+        data={chartData}
+        options={options}
+        plugins={[tooltipTrick]}
+      />
     </div>
   );
 };

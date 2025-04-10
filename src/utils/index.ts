@@ -1,4 +1,7 @@
+
 import { FinancialData } from "../components/Left";
+export const imgPath =
+  "https://images.unsplash.com/photo-1733503711059-acde98cd7fdf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 export const currencyFormat = (money: number | string) => {
   if (!money) return "0";
   return (+money).toLocaleString("ja-JP");
@@ -102,126 +105,256 @@ export function calculateDualYAxisTicks(
 
 // Example data
 export const sampleData1: FinancialData[] = [
-  { age: 10, income: 1200, expenses: 1000, assets: 2000 },
-  { age: 20, income: 1200, expenses: 1000, assets: 2000 },
-  { age: 30, income: 12020, expenses: 1000, assets: 2000 },
-  { age: 40, income: 800, expenses: 800, assets: 1000 },
-  { age: 50, income: 1230, expenses: 500, assets: 2000 },
-  { age: 60, income: 900, expenses: 2000, assets: 7777 },
-  { age: 70, income: 100000, expenses: 690000, assets: 10000 },
-  { age: 80, income: 548, expenses: 9000, assets: 5000 },
-  { age: 90, income: 1000, expenses: 1020, assets: 2000 },
-  { age: 100, income: 1000, expenses: 1000, assets: 10000 },
+  { age: 10, income: 1200, expenses: 1000, assets: 2000, category: [imgPath] },
+  { age: 20, income: 1200, expenses: 1000, assets: 2000, category: [imgPath] },
+  { age: 30, income: 12020, expenses: 1000, assets: 2000, category: [imgPath] },
+  { age: 40, income: 800, expenses: 800, assets: 1000, category: [imgPath] },
+  { age: 50, income: 1230, expenses: 500, assets: 2000, category: [imgPath] },
+  { age: 60, income: 900, expenses: 2000, assets: 7777, category: [imgPath] },
+  {
+    age: 70,
+    income: 100000,
+    expenses: 690000,
+    assets: 10000,
+    category: [imgPath],
+  },
+  { age: 80, income: 548, expenses: 9000, assets: 5000, category: [imgPath] },
+  { age: 90, income: 1000, expenses: 1020, assets: 2000, category: [imgPath] },
+  {
+    age: 100,
+    income: 1000,
+    expenses: 1000,
+    assets: 10000,
+    category: [imgPath],
+  },
 ];
 
 export const sampleData2: FinancialData[] = [
-  { age: 30, income: 500, expenses: 400, assets: 300 },
-  { age: 40, income: 800, expenses: 600, assets: 1000 },
-  { age: 50, income: 1000, expenses: 700, assets: 2000 },
-  { age: 60, income: 900, expenses: 600, assets: 3500 },
-  { age: 70, income: 700, expenses: 500, assets: 4500 },
-  { age: 80, income: 500, expenses: 400, assets: 5000 },
-  { age: 90, income: 500, expenses: 400, assets: 5000 },
-  { age: 100, income: 500, expenses: 400, assets: 5000 },
+  { age: 30, income: 500, expenses: 400, assets: 300, category: [imgPath] },
+  { age: 40, income: 800, expenses: 600, assets: 1000, category: [imgPath] },
+  { age: 50, income: 1000, expenses: 700, assets: 2000, category: [imgPath] },
+  { age: 60, income: 900, expenses: 600, assets: 3500, category: [imgPath] },
+  { age: 70, income: 700, expenses: 500, assets: 4500, category: [imgPath] },
+  { age: 80, income: 500, expenses: 400, assets: 5000, category: [imgPath] },
+  { age: 90, income: 500, expenses: 400, assets: 5000, category: [imgPath] },
+  { age: 100, income: 500, expenses: 400, assets: 5000, category: [imgPath] },
 ];
 export const sampleData3: FinancialData[] = [
-  { age: 15, income: 1500, expenses: 1200, assets: 3000 },
-  { age: 25, income: 2500, expenses: 2000, assets: 5000 },
-  { age: 35, income: 30000, expenses: 1500, assets: 15000 },
-  { age: 45, income: 2000, expenses: 1800, assets: 4000 },
-  { age: 55, income: 5000, expenses: 3000, assets: 10000 },
-  { age: 65, income: 1200, expenses: 2500, assets: 8000 },
-  { age: 75, income: 150000, expenses: 100000, assets: 20000 },
-  { age: 85, income: 700, expenses: 5000, assets: 6000 },
-  { age: 95, income: 1200, expenses: 1100, assets: 3000 },
-  { age: 105, income: 2000, expenses: 2000, assets: 15000 },
+  { age: 15, income: 1500, expenses: 1200, assets: 3000, category: [imgPath] },
+  { age: 25, income: 2500, expenses: 2000, assets: 5000, category: [imgPath] },
+  {
+    age: 35,
+    income: 30000,
+    expenses: 1500,
+    assets: 15000,
+    category: [imgPath],
+  },
+  { age: 45, income: 2000, expenses: 1800, assets: 4000, category: [imgPath] },
+  { age: 55, income: 5000, expenses: 3000, assets: 10000, category: [imgPath] },
+  { age: 65, income: 1200, expenses: 2500, assets: 8000, category: [imgPath] },
+  {
+    age: 75,
+    income: 150000,
+    expenses: 100000,
+    assets: 20000,
+    category: [imgPath],
+  },
+  { age: 85, income: 700, expenses: 5000, assets: 6000, category: [imgPath] },
+  { age: 95, income: 1200, expenses: 1100, assets: 3000, category: [imgPath] },
+  {
+    age: 105,
+    income: 2000,
+    expenses: 2000,
+    assets: 15000,
+    category: [imgPath],
+  },
 ];
 const sampleData4: FinancialData[] = [
-  { age: 10, income: 1200, expenses: 1000, assets: 2000 },
-  { age: 20, income: 1200, expenses: 1000, assets: 2000 },
-  { age: 30, income: 12020, expenses: 1000, assets: 2000 },
-  { age: 40, income: 800, expenses: 800, assets: 1000 },
-  { age: 50, income: 1230, expenses: 500, assets: 2000 },
-  { age: 60, income: 900, expenses: 2000, assets: 7777 },
-  { age: 70, income: 100000, expenses: 690000, assets: 10000 },
-  { age: 80, income: 548, expenses: 9000, assets: 5000 },
-  { age: 90, income: 1000, expenses: 1020, assets: 2000 },
-  { age: 100, income: 1000, expenses: 1000, assets: 10000 },
+  { age: 10, income: 1200, expenses: 1000, assets: 2000, category: [imgPath] },
+  { age: 20, income: 1200, expenses: 1000, assets: 2000, category: [imgPath] },
+  { age: 30, income: 12020, expenses: 1000, assets: 2000, category: [imgPath] },
+  { age: 40, income: 800, expenses: 800, assets: 1000, category: [imgPath] },
+  { age: 50, income: 1230, expenses: 500, assets: 2000, category: [imgPath] },
+  { age: 60, income: 900, expenses: 2000, assets: 7777, category: [imgPath] },
+  {
+    age: 70,
+    income: 100000,
+    expenses: 690000,
+    assets: 10000,
+    category: [imgPath],
+  },
+  { age: 80, income: 548, expenses: 9000, assets: 5000, category: [imgPath] },
+  { age: 90, income: 1000, expenses: 1020, assets: 2000, category: [imgPath] },
+  {
+    age: 100,
+    income: 1000,
+    expenses: 1000,
+    assets: 10000,
+    category: [imgPath],
+  },
 
   // Additional cases
-  { age: 15, income: 0, expenses: 100, assets: 50 }, // Young person, no income
-  { age: 25, income: 3000, expenses: 1500, assets: 8000 }, // Starting career
-  { age: 35, income: 7000, expenses: 4000, assets: 30000 }, // Mid-career growth
-  { age: 45, income: 10000, expenses: 9000, assets: 50000 }, // High income, high expenses
-  { age: 55, income: 5000, expenses: 4500, assets: 80000 }, // Slowing down
-  { age: 65, income: 0, expenses: 2500, assets: 150000 }, // Retired
-  { age: 75, income: 300, expenses: 2200, assets: 100000 }, // Low income, living off assets
-  { age: 85, income: 500, expenses: 1500, assets: 30000 }, // Elderly with declining assets
-  { age: 95, income: 100, expenses: 500, assets: 5000 }, // Near end of life
-  { age: 105, income: 50, expenses: 50, assets: 1000 }, // Just in case 😉
+  { age: 15, income: 0, expenses: 100, assets: 50, category: [imgPath] }, // Young person, no income
+  { age: 25, income: 3000, expenses: 1500, assets: 8000, category: [imgPath] }, // Starting career
+  { age: 35, income: 7000, expenses: 4000, assets: 30000, category: [imgPath] }, // Mid-career growth
+  {
+    age: 45,
+    income: 10000,
+    expenses: 9000,
+    assets: 50000,
+    category: [imgPath],
+  }, // High income, high expenses
+  { age: 55, income: 5000, expenses: 4500, assets: 80000, category: [imgPath] }, // Slowing down
+  { age: 65, income: 0, expenses: 2500, assets: 150000, category: [imgPath] }, // Retired
+  { age: 75, income: 300, expenses: 2200, assets: 100000, category: [imgPath] }, // Low income, living off assets
+  { age: 85, income: 500, expenses: 1500, assets: 30000, category: [imgPath] }, // Elderly with declining assets
+  { age: 95, income: 100, expenses: 500, assets: 5000, category: [imgPath] }, // Near end of life
+  { age: 105, income: 50, expenses: 50, assets: 1000, category: [imgPath] }, // Just in case 😉
 ];
 export const sampleData5: FinancialData[] = [
   // Existing 20 entries...
 
   // More varied samples
-  { age: 12, income: 0, expenses: 0, assets: 1000 },              // Gifted savings
-  { age: 18, income: 1000, expenses: 1100, assets: -500 },        // Starting out with debt
-  { age: 22, income: 2500, expenses: 2000, assets: 3000 },        // Student with part-time job
-  { age: 28, income: 4500, expenses: 3500, assets: 10000 },       // Early professional
-  { age: 38, income: 15000, expenses: 5000, assets: 150000 },     // High earner, aggressive saver
-  { age: 48, income: 4000, expenses: 6000, assets: 20000 },       // Financial stress
-  { age: 58, income: 7000, expenses: 4000, assets: 300000 },      // Late-career success
-  { age: 68, income: 2000, expenses: 3000, assets: 250000 },      // Retirement drawdown
-  { age: 78, income: 0, expenses: 2500, assets: 120000 },         // Living on savings
-  { age: 88, income: 0, expenses: 1000, assets: 0 },              // Out of assets
+  { age: 12, income: 0, expenses: 0, assets: 1000, category: [imgPath] }, // Gifted savings
+  { age: 18, income: 100.5, expenses: 11.5, assets: -500, category: [imgPath] }, // Starting out with debt
+  { age: 22, income: 2500, expenses: 2000, assets: 3000, category: [imgPath] }, // Student with part-time job
+  { age: 28, income: 4500, expenses: 3500, assets: 10000, category: [imgPath] }, // Early professional
+  {
+    age: 38,
+    income: 15000,
+    expenses: 5000,
+    assets: 150000,
+    category: [imgPath],
+  }, // High earner, aggressive saver
+  { age: 48, income: 4000, expenses: 6000, assets: 20000, category: [imgPath] }, // Financial stress
+  {
+    age: 58,
+    income: 7000,
+    expenses: 4000,
+    assets: 300.999,
+    category: [imgPath],
+  }, // Late-career success
+  {
+    age: 68,
+    income: 2000,
+    expenses: 3000,
+    assets: 250000,
+    category: [imgPath, imgPath],
+  }, // Retirement drawdown
+  { age: 78, income: 0, expenses: 2500, assets: 120000, category: [imgPath] }, // Living on savings
+  { age: 88, income: 0, expenses: 1000, assets: 0, category: [imgPath, imgPath] }, // Out of assets
 ];
 export const sampleData6: FinancialData[] = [
-  { age: 35, income: 2000, expenses: 1800, assets: 250000 },   // Early investor
-  { age: 40, income: 1500, expenses: 1200, assets: 400000 },   // Inherited wealth
-  { age: 45, income: 3000, expenses: 2500, assets: 600000 },   // High assets, modest lifestyle
-  { age: 50, income: 1000, expenses: 800, assets: 750000 },    // Frugal millionaire
-  { age: 55, income: 500, expenses: 1000, assets: 900000 },    // Low income, wealthy retiree
-  { age: 60, income: 800, expenses: 1200, assets: 1100000 },   // Living off investments
-  { age: 65, income: 1200, expenses: 1000, assets: 1500000 },  // Passive income lifestyle
-  { age: 70, income: 1000, expenses: 900, assets: 2000000 },   // Rich elder with simple life
-  { age: 75, income: 600, expenses: 500, assets: 1800000 },    // Minimal income, high net worth
-  { age: 80, income: 300, expenses: 400, assets: 2200000 },    // Fully retired, strong savings
+  {
+    age: 35,
+    income: 2000,
+    expenses: 1800,
+    assets: 250000,
+    category: [imgPath],
+  }, // Early investor
+  {
+    age: 40,
+    income: 1500,
+    expenses: 1200,
+    assets: 400000,
+    category: [imgPath],
+  }, // Inherited wealth
+  {
+    age: 45,
+    income: 3000,
+    expenses: 2500,
+    assets: 600000,
+    category: [imgPath],
+  }, // High assets, modest lifestyle
+  { age: 50, income: 1000, expenses: 800, assets: 750000, category: [imgPath] }, // Frugal millionaire
+  { age: 55, income: 500, expenses: 1000, assets: 900000, category: [imgPath] }, // Low income, wealthy retiree
+  {
+    age: 60,
+    income: 800,
+    expenses: 1200,
+    assets: 1100000,
+    category: [imgPath],
+  }, // Living off investments
+  {
+    age: 65,
+    income: 1200,
+    expenses: 1000,
+    assets: 1500000,
+    category: [imgPath],
+  }, // Passive income lifestyle
+  {
+    age: 70,
+    income: 1000,
+    expenses: 900,
+    assets: 2000000,
+    category: [imgPath],
+  }, // Rich elder with simple life
+  { age: 75, income: 600, expenses: 500, assets: 1800000, category: [imgPath] }, // Minimal income, high net worth
+  { age: 80, income: 300, expenses: 400, assets: 2200000, category: [imgPath] }, // Fully retired, strong savings
 ];
 export const sampleData7: FinancialData[] = [
-  { age: 42, income: 1200, expenses: 1000, assets: 500000 },   // Low spending, good savings
-  { age: 50, income: 1500, expenses: 1200, assets: 750000 },   // Comfortable lifestyle
-  { age: 58, income: 1000, expenses: 800, assets: 950000 },    // Approaching retirement
-  { age: 65, income: 600, expenses: 1000, assets: 1200000 },   // Retired, spending more
-  { age: 73, income: 800, expenses: 700, assets: 1600000 },    // Living off returns
-  { age: 80, income: 500, expenses: 600, assets: 2000000 },    // Stable, high net worth
+  {
+    age: 42,
+    income: 1200,
+    expenses: 1000,
+    assets: 500000,
+    category: [imgPath],
+  }, // Low spending, good savings
+  {
+    age: 50,
+    income: 1500,
+    expenses: 1200,
+    assets: 750000,
+    category: [imgPath],
+  }, // Comfortable lifestyle
+  { age: 58, income: 1000, expenses: 800, assets: 950000, category: [imgPath] }, // Approaching retirement
+  {
+    age: 65,
+    income: 600,
+    expenses: 1000,
+    assets: 1200000,
+    category: [imgPath],
+  }, // Retired, spending more
+  { age: 73, income: 800, expenses: 700, assets: 1600000, category: [imgPath] }, // Living off returns
+  { age: 80, income: 500, expenses: 600, assets: 2000000, category: [imgPath] }, // Stable, high net worth
 ];
 export const sampleData8: FinancialData[] = [
-  { age: 42, income: 1200, expenses: 1000, assets: 5000 },   // Low spending, good savings
-  { age: 50, income: 1500, expenses: 1200, assets: 6500 },   // Comfortable lifestyle
-  { age: 58, income: 1000, expenses: 800, assets: 5500 },    // Approaching retirement
-  { age: 65, income: 600, expenses: 1000, assets: 1200 },   // Retired, spending more
-  { age: 73, income: 800, expenses: 700, assets: 1600 },    // Living off returns
-  { age: 80, income: 500, expenses: 600, assets: 2000 },    // Stable, high net worth
+  { age: 42, income: 1200, expenses: 1000, assets: 5000, category: [imgPath] }, // Low spending, good savings
+  { age: 50, income: 1500, expenses: 1200, assets: 6500, category: [imgPath] }, // Comfortable lifestyle
+  { age: 58, income: 1000, expenses: 800, assets: 5500, category: [imgPath] }, // Approaching retirement
+  { age: 65, income: 600, expenses: 1000, assets: 1200, category: [imgPath] }, // Retired, spending more
+  { age: 73, income: 800, expenses: 700, assets: 1600, category: [imgPath] }, // Living off returns
+  { age: 80, income: 500, expenses: 600, assets: 2000, category: [imgPath] }, // Stable, high net worth
 ];
 export const sampleData9: FinancialData[] = [
-  { age: 30, income: 3000, expenses: 2000, assets: 10000 },
-  { age: 31, income: 3200, expenses: 2100, assets: 12000 },
-  { age: 32, income: 3400, expenses: 2200, assets: 14000 },
-  { age: 33, income: 3600, expenses: 2300, assets: 16000 },
-  { age: 34, income: 3800, expenses: 2400, assets: 18000 },
-  { age: 35, income: 4000, expenses: 2500, assets: 20000 },
-  { age: 36, income: 4200, expenses: 2600, assets: 23000 },
-  { age: 37, income: 4400, expenses: 2700, assets: 26000 },
-  { age: 38, income: 4600, expenses: 2800, assets: 29000 },
-  { age: 39, income: 4800, expenses: 2900, assets: 32000 },
-  { age: 40, income: 5000, expenses: 3000, assets: 35000 },
-  { age: 41, income: 5200, expenses: 3100, assets: 38000 },
-  { age: 42, income: 5400, expenses: 3200, assets: 41000 },
-  { age: 43, income: 5600, expenses: 3300, assets: 44000 },
-  { age: 44, income: 5800, expenses: 3400, assets: 47000 },
+  { age: 30, income: 3000, expenses: 2000, assets: 10000, category: [imgPath] },
+  { age: 31, income: 3200, expenses: 2100, assets: 12000, category: [imgPath] },
+  { age: 32, income: 3400, expenses: 2200, assets: 14000, category: [imgPath] },
+  { age: 33, income: 3600, expenses: 2300, assets: 16000, category: [imgPath] },
+  { age: 34, income: 3800, expenses: 2400, assets: 18000, category: [imgPath] },
+  { age: 35, income: 4000, expenses: 2500, assets: 20000, category: [imgPath] },
+  { age: 36, income: 4200, expenses: 2600, assets: 23000, category: [imgPath] },
+  { age: 37, income: 4400, expenses: 2700, assets: 26000, category: [imgPath] },
+  { age: 38, income: 4600, expenses: 2800, assets: 29000, category: [imgPath] },
+  { age: 39, income: 4800, expenses: 2900, assets: 32000, category: [imgPath] },
+  { age: 40, income: 5000, expenses: 3000, assets: 35000, category: [imgPath] },
+  { age: 41, income: 5200, expenses: 3100, assets: 38000, category: [imgPath] },
+  { age: 42, income: 5400, expenses: 3200, assets: 41000, category: [imgPath] },
+  { age: 43, income: 5600, expenses: 3300, assets: 44000, category: [imgPath] },
+  { age: 44, income: 5800, expenses: 3400, assets: 47000, category: [imgPath] },
+];
+export const sampleData10: FinancialData[] = [
+  { age: 30, income: 3000, expenses: 2000, assets: 10000, category: [imgPath] },
+  {
+    age: 31,
+    income: 3140,
+    expenses: 2100,
+    assets: 12000,
+    category: [imgPath, imgPath],
+  },
 ];
 
-export const sampleData = sampleData9;
+export const sampleData = sampleData5;
 
 // const leftAxisData = [
 //   ...sampleData.map((item) => item.income),

@@ -29,7 +29,7 @@ export const RightChart: React.FC<FinancialChartProps> = ({
       const ctx = chart.ctx;
       const yAxis = chart.scales.y1;
 
-      ctx.font = chart.ctx.font || "12px Arial";
+      ctx.font = chart.ctx.font || "12px Inter";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       let maxTextWidth = 0;

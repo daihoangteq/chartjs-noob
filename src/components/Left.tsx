@@ -26,24 +26,27 @@ export interface FinancialData {
   income: number;
   expenses: number;
   assets: number;
+  category: string[];
 }
 
 interface FinancialChartProps {
   data: FinancialData[];
-  setLeftSize: (size: number) => void
+  setLeftSize: (size: number) => void;
 }
 
 type ChartType = "bar" | "line";
 // Define the custom plugin for rounded labels
 
-
-export const LeftChart: React.FC<FinancialChartProps> = ({ data, setLeftSize }) => {
+export const LeftChart: React.FC<FinancialChartProps> = ({
+  data,
+  setLeftSize,
+}) => {
   const roundedLabelsPlugin: Plugin = {
     id: "roundedLabels",
     beforeDraw(chart) {
       const ctx = chart.ctx;
       const yAxis = chart.scales.y;
-  
+
       ctx.font = "12px Arial";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -182,8 +185,8 @@ export const LeftChart: React.FC<FinancialChartProps> = ({ data, setLeftSize }) 
           drawTicks: false,
           drawBorder: false,
           color: "#E4E4E4",
-          borderDash: [4, 4], // This creates the dotted effect [dash length, gap length]
-          tickColor: "transparent", // Hide the tick marks if needed
+          borderDash: [4, 4],
+          tickColor: "transparent",
         },
         ticks: {
           maxTicksLimit: 8,
@@ -228,4 +231,3 @@ export const LeftChart: React.FC<FinancialChartProps> = ({ data, setLeftSize }) 
     </div>
   );
 };
-
