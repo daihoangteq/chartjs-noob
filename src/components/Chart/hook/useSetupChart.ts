@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { CHART_INGREDIENTS } from "../ChartContext";
 import { ChartData, ChartOptions, ChartType } from "chart.js";
 import { Context } from "./useContextChart";

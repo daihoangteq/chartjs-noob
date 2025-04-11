@@ -6,10 +6,12 @@ import useSetupChart from "./hook/useSetupChart";
 import useDrawAllTooltip from "./hook/useDrawAllTooltip";
 import { Plugin } from "chart.js";
 import useDrawEachTooltip from "./hook/useDrawEachTooltip";
+import useDynamicTooltips from "./hook/useDynamicTooltips";
 
 const CenterChart = () => {
   const { drawAllToolTip } = useDrawAllTooltip();
   const { drawEachTooltip } = useDrawEachTooltip();
+  const {dynamicDrawTooltip} = useDynamicTooltips();
   const chartProperty = useContext(Context);
   const { chartData, options } = useSetupChart("center");
   const widthChart = useCalculateChartWidth({
@@ -19,7 +21,7 @@ const CenterChart = () => {
     data: chartProperty?.data || [],
   });
   const handlePlugin = () => {
-    const arrayOfPlugin: Plugin[] = [drawAllToolTip, drawEachTooltip];
+    const arrayOfPlugin: Plugin[] = [drawAllToolTip, drawEachTooltip, dynamicDrawTooltip];
     if (!chartProperty || !chartProperty.plugins) return [];
     return arrayOfPlugin.filter((obj) =>
       Object.values(obj).some((value) =>
@@ -30,7 +32,7 @@ const CenterChart = () => {
   if (!chartProperty || chartProperty.pendingCalculate) return <></>;
   return (
     <div
-      className={`overflow-x-auto overflow-y-hidden mx-auto w-full relative`}
+      className={`overflow-x-auto overflow-y-hidden mx-auto w-full h-full relative`}
       style={{
         paddingLeft: `${chartProperty.leftChartSize}`,
         paddingRight: `${chartProperty.rightChartSize}`,

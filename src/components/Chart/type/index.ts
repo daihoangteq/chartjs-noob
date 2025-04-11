@@ -1,4 +1,3 @@
-import { Plugin } from "chart.js";
 import { CHART_INGREDIENTS } from "../ChartContext";
 export interface FinancialData {
   age: number;
@@ -20,7 +19,7 @@ export interface IActionChart {
   updateSizeChart: (type: CHART_INGREDIENTS, value: string) => void;
 }
 export interface IListOfPLugin {
-  plugins?: Array<""|"drawAllToolTip" | "drawEachTooltip">;
+  plugins?: Array<""|"drawAllToolTip" | "drawEachTooltip" | "dynamicTooltip">;
 }
 export interface IPropsContextChart
   extends IPropsChart,

@@ -237,7 +237,7 @@ export const sampleData5: FinancialData[] = [
     age: 68,
     income: 2000,
     expenses: 3000,
-    assets: 250000,
+    assets: 2500000,
     category: [imgPath, imgPath],
   }, // Retirement drawdown
   { age: 78, income: 0, expenses: 2500, assets: 120000, category: [imgPath] }, // Living on savings
@@ -254,7 +254,7 @@ export const sampleData6: FinancialData[] = [
     age: 35,
     income: 2000,
     expenses: 1800,
-    assets: 250000,
+    assets: 2500000,
     category: [imgPath],
   }, // Early investor
   {
