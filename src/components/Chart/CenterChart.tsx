@@ -5,9 +5,11 @@ import { Bar } from "react-chartjs-2";
 import useSetupChart from "./hook/useSetupChart";
 import useDrawAllTooltip from "./hook/useDrawAllTooltip";
 import { Plugin } from "chart.js";
+import useDrawEachTooltip from "./hook/useDrawEachTooltip";
 
 const CenterChart = () => {
   const { drawAllToolTip } = useDrawAllTooltip();
+  const { drawEachTooltip } = useDrawEachTooltip();
   const chartProperty = useContext(Context);
   const { chartData, options } = useSetupChart("center");
   const widthChart = useCalculateChartWidth({
@@ -17,27 +19,30 @@ const CenterChart = () => {
     data: chartProperty?.data || [],
   });
   const handlePlugin = () => {
-    const arrayOfPlugin: Plugin[] = [drawAllToolTip];
-    return arrayOfPlugin.filter(obj => 
-      Object.values(obj).some(value => chartProperty?.plugins.includes(value))
-  );
+    const arrayOfPlugin: Plugin[] = [drawAllToolTip, drawEachTooltip];
+    if (!chartProperty || !chartProperty.plugins) return [];
+    return arrayOfPlugin.filter((obj) =>
+      Object.values(obj).some((value) =>
+        chartProperty?.plugins?.includes(value)
+      )
+    );
   };
   if (!chartProperty || chartProperty.pendingCalculate) return <></>;
   return (
     <div
       className={`overflow-x-auto overflow-y-hidden mx-auto w-full relative`}
       style={{
-        paddingLeft: `${chartProperty.rightChartSize}`,
+        paddingLeft: `${chartProperty.leftChartSize}`,
         paddingRight: `${chartProperty.rightChartSize}`,
       }}
     >
       <div
-        className="h-full relative"
+        className="h-full relative min-w-full"
         style={{
           width: `${widthChart}`,
         }}
       >
-        <div className="w-full h-[396px]" id="centerChart">
+        <div className="w-full h-full" id={chartProperty.idChart}>
           <Bar data={chartData} options={options} plugins={handlePlugin()} />
         </div>
       </div>

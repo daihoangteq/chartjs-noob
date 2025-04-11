@@ -6,7 +6,6 @@ import { IPropsChart } from "../type";
 const customContent = (
   x: number,
   y: number,
-  key: string,
   imgCategory: string[],
   idChart: IPropsChart["idChart"]
 ) => {
@@ -68,12 +67,13 @@ const customContent = (
       </div>
             `;
     const currentLabel = (tooltipEl as HTMLDivElement).querySelector(
-      `.key-label-${key}`
+      `.tooltip-label-${idChart}`
     ) as HTMLDivElement;
     if (tooltipEl) {
       if (currentLabel) {
         currentLabel.style.left = x + "px";
         currentLabel.style.top = y + "px";
+        currentLabel.innerHTML = tableBody;
         return;
       }
       const newItem = document.createElement("div");
@@ -83,37 +83,36 @@ const customContent = (
       newItem.style.left = x + "px";
       newItem.style.top = y + "px";
       newItem.style.pointerEvents = "none";
-      newItem.classList.add(`key-label-${key}`);
+      newItem.classList.add(`tooltip-label-${idChart}`);
       newItem.style.transform = "translate(-50%, -100%)";
       tooltipEl.appendChild(newItem);
     }
   }
 };
 
-const useDrawAllTooltip = () => {
+const useDrawEachTooltip = () => {
   const chartContext = useContext(Context);
-  const drawAllToolTip = useMemo((): Plugin => {
+  const drawEachTooltip = useMemo((): Plugin => {
     return {
-      id: "drawAllToolTip",
+      id: "drawEachTooltip",
       afterDatasetDraw: (chart: Chart) => {
         const { data: dataExpense } = chart.getDatasetMeta(1);
         const { data: dataIncome } = chart.getDatasetMeta(2);
-        dataExpense.forEach((_, index) => {
-          const y = Math.min(dataExpense[index].y, dataIncome[index].y);
-          const x = (dataExpense[index].x + dataIncome[index].x) / 2;
-          const imgCategory = chartContext?.data[index].category || [];
-          customContent(
-            x,
-            y - 15,
-            `${index}`,
-            imgCategory,
-            chartContext?.idChart || ""
-          );
-        });
+        const currentActive = dataIncome.findIndex((item) => item.active);
+        if (currentActive < 0) return;
+        const y = Math.min(
+          dataExpense[currentActive].y,
+          dataIncome[currentActive].y
+        );
+        const x =
+          (dataExpense[currentActive].x + dataIncome[currentActive].x) / 2;
+        const imgCategory = chartContext?.data[currentActive].category || [];
+        // 15 is triangle height
+        customContent(x, y - 15, imgCategory, chartContext?.idChart || "");
       },
     };
   }, [chartContext]);
-  return { drawAllToolTip };
+  return { drawEachTooltip };
 };
 
-export default useDrawAllTooltip;
+export default useDrawEachTooltip;

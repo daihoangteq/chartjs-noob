@@ -1,4 +1,3 @@
-
 import { FinancialData } from "../components/Left";
 export const imgPath =
   "https://images.unsplash.com/photo-1733503711059-acde98cd7fdf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
@@ -242,7 +241,13 @@ export const sampleData5: FinancialData[] = [
     category: [imgPath, imgPath],
   }, // Retirement drawdown
   { age: 78, income: 0, expenses: 2500, assets: 120000, category: [imgPath] }, // Living on savings
-  { age: 88, income: 0, expenses: 1000, assets: 0, category: [imgPath, imgPath] }, // Out of assets
+  {
+    age: 88,
+    income: 0,
+    expenses: 1000,
+    assets: 0,
+    category: [imgPath, imgPath],
+  }, // Out of assets
 ];
 export const sampleData6: FinancialData[] = [
   {
@@ -353,6 +358,73 @@ export const sampleData10: FinancialData[] = [
     category: [imgPath, imgPath],
   },
 ];
+export const sampleData11: FinancialData[] = [
+  { age: 30, income: 3000, expenses: 2000, assets: 10000, category: [imgPath] },
+  { age: 31, income: 3020, expenses: 2010, assets: 11000, category: [imgPath] },
+  { age: 32, income: 3040, expenses: 2020, assets: 12000, category: [imgPath] },
+  { age: 33, income: 3060, expenses: 2030, assets: 13000, category: [imgPath] },
+  { age: 34, income: 3080, expenses: 2040, assets: 14000, category: [imgPath] },
+  { age: 35, income: 3100, expenses: 2050, assets: 15000, category: [imgPath] },
+  { age: 36, income: 3120, expenses: 2060, assets: 16000, category: [imgPath] },
+  { age: 37, income: 3140, expenses: 2070, assets: 17000, category: [imgPath] },
+  { age: 38, income: 3160, expenses: 2080, assets: 18000, category: [imgPath] },
+  { age: 39, income: 3180, expenses: 2090, assets: 19000, category: [imgPath] },
+  { age: 40, income: 3200, expenses: 2100, assets: 20000, category: [imgPath] },
+  { age: 41, income: 3220, expenses: 2110, assets: 21000, category: [imgPath] },
+  { age: 42, income: 3240, expenses: 2120, assets: 22000, category: [imgPath] },
+  { age: 43, income: 3260, expenses: 2130, assets: 23000, category: [imgPath] },
+  { age: 44, income: 3280, expenses: 2140, assets: 24000, category: [imgPath] },
+  { age: 45, income: 3300, expenses: 2150, assets: 25000, category: [imgPath] },
+  { age: 46, income: 3320, expenses: 2160, assets: 26000, category: [imgPath] },
+  { age: 47, income: 3340, expenses: 2170, assets: 27000, category: [imgPath] },
+  { age: 48, income: 3360, expenses: 2180, assets: 28000, category: [imgPath] },
+  { age: 49, income: 3380, expenses: 2190, assets: 29000, category: [imgPath] },
+  { age: 50, income: 3400, expenses: 2200, assets: 30000, category: [imgPath] },
+  { age: 51, income: 3420, expenses: 2210, assets: 31000, category: [imgPath] },
+  { age: 52, income: 3440, expenses: 2220, assets: 32000, category: [imgPath] },
+  { age: 53, income: 3460, expenses: 2230, assets: 33000, category: [imgPath] },
+  { age: 54, income: 3480, expenses: 2240, assets: 34000, category: [imgPath] },
+  { age: 55, income: 3500, expenses: 2250, assets: 35000, category: [imgPath] },
+  { age: 56, income: 3520, expenses: 2260, assets: 36000, category: [imgPath] },
+  { age: 57, income: 3540, expenses: 2270, assets: 37000, category: [imgPath] },
+  { age: 58, income: 3560, expenses: 2280, assets: 38000, category: [imgPath] },
+  { age: 59, income: 3580, expenses: 2290, assets: 39000, category: [imgPath] },
+  { age: 60, income: 3600, expenses: 2300, assets: 40000, category: [imgPath] },
+  { age: 61, income: 3620, expenses: 2310, assets: 41000, category: [imgPath] },
+  { age: 62, income: 3640, expenses: 2320, assets: 42000, category: [imgPath] },
+  { age: 63, income: 3660, expenses: 2330, assets: 43000, category: [imgPath] },
+  { age: 64, income: 3680, expenses: 2340, assets: 44000, category: [imgPath] },
+  { age: 65, income: 3700, expenses: 2350, assets: 45000, category: [imgPath] },
+  { age: 66, income: 3720, expenses: 2360, assets: 46000, category: [imgPath] },
+  { age: 67, income: 3740, expenses: 2370, assets: 47000, category: [imgPath] },
+  { age: 68, income: 3760, expenses: 2380, assets: 48000, category: [imgPath] },
+  { age: 69, income: 3780, expenses: 2390, assets: 49000, category: [imgPath] },
+  { age: 70, income: 3800, expenses: 2400, assets: 50000, category: [imgPath] },
+  { age: 71, income: 3820, expenses: 2410, assets: 51000, category: [imgPath] },
+  { age: 72, income: 3840, expenses: 2420, assets: 52000, category: [imgPath] },
+  { age: 73, income: 3860, expenses: 2430, assets: 53000, category: [imgPath] },
+  { age: 74, income: 3880, expenses: 2440, assets: 54000, category: [imgPath] },
+  { age: 75, income: 3900, expenses: 2450, assets: 55000, category: [imgPath] },
+  { age: 76, income: 3920, expenses: 2460, assets: 56000, category: [imgPath] },
+  { age: 77, income: 3940, expenses: 2470, assets: 57000, category: [imgPath] },
+  { age: 78, income: 3960, expenses: 2480, assets: 58000, category: [imgPath] },
+  { age: 79, income: 3980, expenses: 2490, assets: 59000, category: [imgPath] },
+  { age: 80, income: 4000, expenses: 2500, assets: 60000, category: [imgPath] },
+];
+
+export const sampleDataRandom: FinancialData[] = Array.from(
+  { length: 20 },
+  (_, index) => ({
+    age: Math.floor(Math.random() * 30) + index,
+    income: Math.floor(Math.random() * 3000) + index * 20, // Increment income by 20 for each item
+    expenses: Math.floor(Math.random() * 4000) + index * 10, // Increment expenses by 10 for each item
+    assets: Math.floor(Math.random() * 4000) + index * 1000, // Increment assets by 1000 for each item
+    category: Array.from(
+      { length: Math.floor(Math.random() * 3) },
+      () => imgPath
+    ), // Fixed category
+  })
+);
 
 export const sampleData = sampleData5;
 

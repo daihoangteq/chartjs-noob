@@ -6,9 +6,6 @@ import { calculateDualYAxisTicks } from "../utils";
 
 const useSetupChart = (position: CHART_INGREDIENTS) => {
   const chart = useContext(Context);
-  useEffect(() => {
-    console.log("je;;p");
-  }, [chart]);
   const chartData: ChartData<ChartType> = useMemo(() => {
     if (!chart || !chart.data) return { labels: [], datasets: [] };
     const data = chart.data;
@@ -57,7 +54,7 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
     };
   }, [chart?.data]);
 
-  const options: ChartOptions<ChartType> = useMemo(() => {
+  const options = useMemo((): ChartOptions<ChartType> => {
     if (!chart || !chart.data || !Array.isArray(chart.data)) return {};
     const data = chart.data;
     return {
@@ -91,10 +88,10 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
               size: 12,
             },
             padding: 5,
-            callback: function (value) {
+            callback: (value: number | string): string | number | null | undefined => {
               return position === "center"
                 ? chartData.labels
-                  ? chartData.labels[value as number]
+                  ? chartData.labels[value as number] as string
                   : ""
                 : "";
             },

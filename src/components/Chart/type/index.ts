@@ -8,6 +8,7 @@ export interface FinancialData {
   category: string[];
 }
 export interface IPropsChart {
+  idChart:string; 
   data: FinancialData[];
   leftChartSize: string;
   rightChartSize: string;
@@ -19,9 +20,10 @@ export interface IActionChart {
   updateSizeChart: (type: CHART_INGREDIENTS, value: string) => void;
 }
 export interface IListOfPLugin {
-  plugins: string[];
+  plugins?: Array<""|"drawAllToolTip" | "drawEachTooltip">;
 }
 export interface IPropsContextChart
   extends IPropsChart,
     IActionChart,
     IListOfPLugin {}
+
