@@ -1,5 +1,6 @@
 import { Chart, Plugin } from "chart.js";
 import { sampleData } from "../../utils";
+import { BASE_HEIGH_OF_TRIANGLE } from "../Chart/constant";
 export const imgPath =
   "https://images.unsplash.com/photo-1733503711059-acde98cd7fdf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 export const customContentTooltip = (context: unknown) => {
@@ -199,7 +200,7 @@ export const tooltipTrick: Plugin = {
       const y = Math.min(dataExpense[index].y, dataIncome[index].y);
       const x = (dataExpense[index].x + dataIncome[index].x) / 2;
       const imgCategory = sampleData[index].category;
-      customContent(x, y - 15, `${index}`, imgCategory);
+      customContent(x, y - BASE_HEIGH_OF_TRIANGLE, `${index}`, imgCategory);
     });
   },
 };

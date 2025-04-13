@@ -32,14 +32,15 @@ const CenterChart = () => {
   if (!chartProperty || chartProperty.pendingCalculate) return <></>;
   return (
     <div
-      className={`overflow-x-auto overflow-y-hidden mx-auto w-full h-full relative`}
+      className={`overflow-x-auto overflow-y-hidden mx-auto w-full h-full relative flex`}
       style={{
         paddingLeft: `${chartProperty.leftChartSize}`,
         paddingRight: `${chartProperty.rightChartSize}`,
       }}
     >
+      <div style={{width:`${chartProperty.leftChartSize}`, height:"100%"}}></div>
       <div
-        className="h-full relative min-w-full"
+        className="h-full relative min-w-full flex-shrink-0"
         style={{
           width: `${widthChart}`,
         }}
@@ -48,6 +49,7 @@ const CenterChart = () => {
           <Bar data={chartData} options={options} plugins={handlePlugin()} />
         </div>
       </div>
+      <div style={{width:`${chartProperty.rightChartSize}`, height:"100%"}}></div>
     </div>
   );
 };

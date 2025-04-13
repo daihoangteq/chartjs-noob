@@ -1,8 +1,14 @@
 import { Chart, Plugin } from "chart.js";
 import React, { useContext, useMemo } from "react";
 import { Context } from "./useContextChart";
-import { IPropsChart } from "../type";
-import { renderTooltip, renderTooltipContent } from "../utils";
+import { ALIGNMENT_OF_TOOLTIP, IPropsChart } from "../type";
+import {
+  calculatePositionOfTooltip,
+  renderTooltip,
+  renderTooltipContent,
+} from "../utils";
+import { BASE_HEIGH_OF_TRIANGLE } from "../constant";
+import { handleBaseDrawPlugin } from "../utils/plugin-base";
 
 const customContent = (props: {
   x: number;
@@ -12,14 +18,23 @@ const customContent = (props: {
   idChart: IPropsChart["idChart"];
   containerTooltip: HTMLDivElement;
   isRendered: boolean;
+  alignment: ALIGNMENT_OF_TOOLTIP;
 }) => {
-  const { idChart, imgCategory, x, y, key, containerTooltip, isRendered } =
-    props;
+  const {
+    idChart,
+    imgCategory,
+    x,
+    y,
+    key,
+    containerTooltip,
+    isRendered,
+    alignment,
+  } = props;
   if (!idChart || !Array.isArray(imgCategory) || imgCategory.length === 0)
     return;
   if (!containerTooltip) return;
   if (isRendered) {
-    const tableBody = renderTooltipContent(imgCategory);
+    const tableBody = renderTooltipContent(imgCategory, alignment);
     const currentLabel = (containerTooltip as HTMLDivElement).querySelector(
       `.dynamic-tooltip-label-${idChart}`
     ) as HTMLDivElement;
@@ -56,67 +71,69 @@ const useDynamicTooltips = () => {
   const dynamicDrawTooltip = useMemo((): Plugin => {
     return {
       id: "dynamicTooltip",
-      afterDatasetDraw: (chart: Chart) => {
+      afterDatasetDraw:(chart: Chart) => {
         const { data: dataExpense } = chart.getDatasetMeta(1);
-        const { data: dataIncome } = chart.getDatasetMeta(2);
-        const currentActive = dataIncome.findIndex((item) => item.active);
-        let currentContainerTooltip = document.getElementById(
-          `containerTooltip-${chartContext?.idChart}`
-        ) as HTMLDivElement;
-        const containerCenterChart = document.getElementById(
-          `${chartContext?.idChart}`
-        ) as HTMLDivElement;
+        const idChart = chartContext?.idChart || "";
+        if (!idChart) return;
+      
+        const containerCenterChart = document.getElementById(idChart) as HTMLDivElement;
         if (!containerCenterChart) return;
-        const isRendered = Boolean(
-          containerCenterChart.getAttribute("tooltip-rendered")
-        );
+      
+        const isRendered = containerCenterChart.getAttribute("tooltip-rendered") === "true";
+        const currentActive = dataExpense.findIndex((item) => item.active);
+      
+        let containerTooltip = document.getElementById(`containerTooltip-${idChart}`) as HTMLDivElement;
+        if (!containerTooltip) {
+          containerTooltip = document.createElement("div");
+          containerTooltip.id = `containerTooltip-${idChart}`;
+          containerCenterChart.appendChild(containerTooltip);
+        }
+      
         if (currentActive < 0 && !isRendered) {
-          if (!currentContainerTooltip) {
-            const containerTooltip = document.createElement("div");
-            containerTooltip.setAttribute(
-              "id",
-              `containerTooltip-${chartContext?.idChart}`
-            );
-            currentContainerTooltip = containerTooltip;
-            containerCenterChart.appendChild(containerTooltip);
-          }
           dataExpense.forEach((_, index) => {
-            const y = Math.min(dataExpense[index].y, dataIncome[index].y);
-            const x = (dataExpense[index].x + dataIncome[index].x) / 2;
             const imgCategory = chartContext?.data[index].category || [];
+            const positionOfTooltip = handleBaseDrawPlugin({
+              chart,
+              activeIndex: index,
+              containerTooltip: containerCenterChart,
+              idChart,
+              imgCategory,
+              forceCenter: true,
+            });
             customContent({
-              x,
-              y: y - 15,
-              key: `${index}`,
-              idChart: chartContext?.idChart || "",
-              containerTooltip: currentContainerTooltip,
-              imgCategory: imgCategory,
-              isRendered: isRendered,
+              x: positionOfTooltip.x,
+              y: positionOfTooltip.y,
+              key: String(index),
+              idChart,
+              containerTooltip,
+              imgCategory,
+              isRendered,
+              alignment: positionOfTooltip.alignment,
             });
           });
-          return;
-        }
-        if (currentActive >= 0) {
           containerCenterChart.setAttribute("tooltip-rendered", "true");
-          currentContainerTooltip.innerHTML = "";
-          const y = Math.min(
-            dataExpense[currentActive].y,
-            dataIncome[currentActive].y
-          );
-          const x =
-            (dataExpense[currentActive].x + dataIncome[currentActive].x) / 2;
+        } else if (currentActive >= 0) {
+          containerTooltip.innerHTML = "";
           const imgCategory = chartContext?.data[currentActive].category || [];
-          customContent({
-            x,
-            y: y - 15,
-            key: `${currentActive}`,
-            idChart: chartContext?.idChart || "",
+          const positionOfTooltip = handleBaseDrawPlugin({
+            chart,
+            activeIndex: currentActive,
             containerTooltip: containerCenterChart,
-            imgCategory: imgCategory,
+            idChart,
+            imgCategory,
+          });
+          customContent({
+            x: positionOfTooltip.x,
+            y: positionOfTooltip.y,
+            key: String(currentActive),
+            idChart,
+            containerTooltip,
+            imgCategory,
             isRendered: true,
+            alignment: positionOfTooltip.alignment,
           });
         }
-      },
+      }
     };
   }, [chartContext]);
   return { dynamicDrawTooltip };

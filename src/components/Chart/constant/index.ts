@@ -3,3 +3,5 @@ export const BASE_WIDTH_OF_TOOLTIP = 32;
 export const BASE_PADDING_X_OF_CONTENT_TOOLTIP = 4;
 export const BASE_PADDING_Y_OF_CONTENT_TOOLTIP = 2;
 export const BASE_GAP_OF_CONTENT_TOOLTIP = 2;
+export const BASE_HEIGH_OF_TRIANGLE = 15;
+

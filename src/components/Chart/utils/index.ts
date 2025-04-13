@@ -1,5 +1,12 @@
-import { BASE_GAP_OF_CONTENT_TOOLTIP, BASE_PADDING_X_OF_CONTENT_TOOLTIP, BASE_PADDING_Y_OF_CONTENT_TOOLTIP, BASE_SIZE_ITEM_OF_TOOLTIP, BASE_WIDTH_OF_TOOLTIP } from "../constant";
-import { FinancialData } from "../type";
+import {
+  BASE_GAP_OF_CONTENT_TOOLTIP,
+  BASE_HEIGH_OF_TRIANGLE,
+  BASE_PADDING_X_OF_CONTENT_TOOLTIP,
+  BASE_PADDING_Y_OF_CONTENT_TOOLTIP,
+  BASE_SIZE_ITEM_OF_TOOLTIP,
+  BASE_WIDTH_OF_TOOLTIP,
+} from "../constant";
+import { FinancialData, ALIGNMENT_OF_TOOLTIP } from "../type";
 
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -9,7 +16,7 @@ const getTicksGap = (
   unroundedTickSize: number,
   minRaw: number,
   baseUnit: number,
-  newDataYMax: number,
+  newDataYMax: number
 ) => {
   let x = Math.floor(Math.log10(unroundedTickSize));
   const deltaSteps: number[] = [
@@ -64,7 +71,7 @@ const getTicksGap = (
 export const getTickValueYAxis = (
   dataYMin: number,
   dataYMax: number,
-  countTickLimit = 5,
+  countTickLimit = 5
 ): {
   ticks: number[];
   dataYMinProcessed: number;
@@ -99,7 +106,7 @@ export const getTickValueYAxis = (
     unroundedTickSize,
     minRaw,
     baseUnit,
-    newDataYMax,
+    newDataYMax
   );
   const dataYMaxProcessed = ticks[baseUnit];
   if (maxRaw > dataYMaxProcessed) {
@@ -132,8 +139,9 @@ export function calculateDualYAxisTicks(
   function calculateNiceScale(data: number[]) {
     // Get max value from data
     const maxValue = Math.max(...data.filter((val) => !isNaN(val)));
-    const {dataYMaxProcessed, dataYMinProcessed, gap, ticks} =getTickValueYAxis(0, maxValue, 8)
- 
+    const { dataYMaxProcessed, dataYMinProcessed, gap, ticks } =
+      getTickValueYAxis(0, maxValue, 8);
+
     return {
       ticks,
       stepSize: gap,
@@ -141,15 +149,17 @@ export function calculateDualYAxisTicks(
       max: dataYMaxProcessed,
     };
   }
-  const dataReturn =  {
+  const dataReturn = {
     leftAxis: calculateNiceScale(leftAxisData),
     rightAxis: calculateNiceScale(rightAxisData),
   };
   return dataReturn;
 }
 
-
-export const renderTooltipContent = (imgCategory: FinancialData["category"]) => {
+export const renderTooltipContent = (
+  imgCategory: FinancialData["category"],
+  alignment?: ALIGNMENT_OF_TOOLTIP
+) => {
   const tableBody = `
   <div style="position: relative; border-radius: 20px; background-color: white; filter:drop-shadow(0px 2px 6px #00000040)">
     <div
@@ -158,6 +168,7 @@ export const renderTooltipContent = (imgCategory: FinancialData["category"]) => 
         flex-direction: column;
         position: relative;
         width: 32px;
+        z-index: 1;
         padding: ${BASE_PADDING_Y_OF_CONTENT_TOOLTIP}px ${BASE_PADDING_X_OF_CONTENT_TOOLTIP}px;
         border-radius: 20px;
       "
@@ -180,12 +191,42 @@ export const renderTooltipContent = (imgCategory: FinancialData["category"]) => 
       })
       .join("")}
     </div>
-    <div
+      ${renderTriangle(alignment)}
+  </div>
+        `;
+  return tableBody;
+};
+
+export const renderTooltip = (
+  content: string,
+  x: number,
+  y: number
+): HTMLDivElement => {
+  const newItem = document.createElement("div");
+  newItem.innerHTML = content;
+  newItem.style.position = "absolute";
+  newItem.style.zIndex = "1";
+  newItem.style.left = x + "px";
+  newItem.style.top = y + "px";
+  newItem.style.pointerEvents = "none";
+  newItem.style.transform = "translate(-50%, -100%)";
+  return newItem;
+};
+export const renderTriangle = (alignment?: ALIGNMENT_OF_TOOLTIP) => {
+  const alignments = {
+    left: { top: "50%", left: "100%", transform: "translate(0, -10%)", rotate: "-90deg" },
+    right: { top: "50%", left: "0%", transform: "translate(-50%, 50%)", rotate: "90deg" },
+    center: { top: "100%", left: "50%", transform: "translate(-50%, -30%)", rotate: "0deg" },
+  };
+  const { top, left, transform, rotate } = alignment ? alignments[alignment] :alignments.center;
+  return `<div
       style="
-        top: 100%;
-        left: 50%;
-        transform: translate(-50%, -30%);
+        top: ${top};
+        left: ${left};
+        transform: ${transform};
+        rotate: ${rotate};
         position: absolute;
+        z-index: 0;
       "
     >
       <svg
@@ -201,44 +242,45 @@ export const renderTooltipContent = (imgCategory: FinancialData["category"]) => 
         />
       </svg>
     </div>
-  </div>
-        `;
-  return tableBody;
+`;
 };
+export const calculatePositionOfTooltip = (props: {
+  baseX: number;
+  baseY: { y: number; yMax: number; yAsset: number };
+  numberOfImg: number;
+  sizeOfContainer?: { width?: number; height?: number };
+  forceCenter?: boolean;
+}): { x: number; y: number; alignment: ALIGNMENT_OF_TOOLTIP } => {
+  const PADDING_TOP = 15;
+  const { baseX, baseY, numberOfImg, sizeOfContainer, forceCenter } = props;
 
-export const renderTooltip = (content: string, x: number, y: number): HTMLDivElement => {
-  const newItem = document.createElement("div");
-  newItem.innerHTML = content;
-  newItem.style.position = "absolute";
-  newItem.style.zIndex = "1";
-  newItem.style.left = x + "px";
-  newItem.style.top = y + "px";
-  newItem.style.pointerEvents = "none";
-  newItem.style.transform = "translate(-50%, -100%)";
-  return newItem
-}
+  const heightOfTooltip =
+    numberOfImg * BASE_SIZE_ITEM_OF_TOOLTIP +
+    BASE_PADDING_Y_OF_CONTENT_TOOLTIP * 2 +
+    BASE_GAP_OF_CONTENT_TOOLTIP * numberOfImg * 2;
 
-export const calculatePositionOfTooltip = (props :{baseX: number, baseY: number, numberOfImg: number, sizeOfContainer: number, forceCenter?: {yMax: number, yAsset: number}} )=> {
-  const {baseX, baseY, numberOfImg, sizeOfContainer, forceCenter} = props
   let x = baseX;
-  let y = baseY;
-  const heightOfTooltip = numberOfImg * BASE_SIZE_ITEM_OF_TOOLTIP + BASE_PADDING_Y_OF_CONTENT_TOOLTIP * 2 + BASE_GAP_OF_CONTENT_TOOLTIP * numberOfImg * 2
-  if(y - heightOfTooltip <= 0) {
-    y = y + heightOfTooltip + 20; // the triangle
-    if(forceCenter) {
-      const isHideAsset= y > forceCenter.yAsset;
-      console.log({isHideAsset});
-      
-      y =  isHideAsset ? forceCenter.yMax + heightOfTooltip + 20 : y 
+  let y = baseY.y;
+  let alignment: ALIGNMENT_OF_TOOLTIP = "center";
+
+  if (y - heightOfTooltip <= PADDING_TOP) {
+    alignment = forceCenter ? "center" : "right";
+    y += heightOfTooltip + BASE_HEIGH_OF_TRIANGLE + 5; // extra space
+
+    if (forceCenter) {
+      const isHideAsset = y + BASE_HEIGH_OF_TRIANGLE >= baseY.yAsset;
+      y = isHideAsset ? baseY.yMax + heightOfTooltip + BASE_HEIGH_OF_TRIANGLE + 5 : y;
+    } else {
+      if (sizeOfContainer && x + BASE_WIDTH_OF_TOOLTIP >= (sizeOfContainer.width || 0)) {
+        x -= BASE_WIDTH_OF_TOOLTIP;
+        alignment = "left";
+      } else {
+        x += BASE_WIDTH_OF_TOOLTIP;
+      }
     }
-  }else {
-    y = y - 10; // padding
+  } else {
+    y -= PADDING_TOP;
   }
-  const dataReturn = {
-    x,
-    y
-  }
-  return dataReturn;
-  // console.log({heightOfTooltip});
-  // console.dir(props);
-}
+
+  return { x, y, alignment };
+};

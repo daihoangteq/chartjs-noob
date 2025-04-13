@@ -121,10 +121,9 @@ export const sampleData1: FinancialData[] = [
   { age: 90, income: 1000, expenses: 1020, assets: 2000, category: [imgPath] },
   {
     age: 100,
-    income: 1000,
-    expenses: 1000,
-    assets: 10000,
-    category: [imgPath],
+    income: 500000, expenses: 680000,
+    assets: 500000,
+    category: [imgPath, imgPath, imgPath],
   },
 ];
 
@@ -455,7 +454,7 @@ export const sampleData13: FinancialData[] = [
   { age: 43, income: 5600, expenses: 3300, assets: 44000, category: [imgPath] },
   { age: 44, income: 3400, expenses: 5800, assets: 40000, category: [imgPath, imgPath, imgPath] },
 ];
-export const sampleData = sampleData13;
+export const sampleData = sampleData1;
 
 // const leftAxisData = [
 //   ...sampleData.map((item) => item.income),

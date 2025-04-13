@@ -5,14 +5,14 @@ import Chart from "./components/Chart";
 function App() {
   return (
     <div className="w-full h-full flex flex-wrap gap-4">
-      <div className=" w-1/2 max-w-[393px] h-[396px] flex flex-col items-center bg-white">
-        <Chart idChart="chartWidthDrawEachPlugin" plugins={[""]} />
+      <div className=" w-1/2 max-w-[393px] h-[500px] flex flex-col items-center bg-white">
+        <Chart idChart="chartWidthDrawEachPlugin" plugins={["drawEachTooltip"]} />
       </div>
       <div className=" w-1/2 max-w-[600px] h-[500px] flex flex-col items-center bg-white">
         <Chart plugins={["drawAllToolTip"]} idChart="chartWithPlugin" />
       </div>
       <div className=" w-1/2 max-w-[600px] h-[500px] flex flex-col items-center bg-white">
-        <Chart plugins={[""]} idChart="comboPlugin" />
+        <Chart plugins={["dynamicTooltip"]} idChart="comboPlugin" />
       </div>
       {/* <div className=" w-1/2 max-w-[600px] h-[500px] flex flex-col items-center bg-white">
         <Chart plugins={["drawAllToolTip"]} idChart="comboPlugin" />

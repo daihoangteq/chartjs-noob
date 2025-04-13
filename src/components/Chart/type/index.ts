@@ -26,3 +26,4 @@ export interface IPropsContextChart
     IActionChart,
     IListOfPLugin {}
 
+export type ALIGNMENT_OF_TOOLTIP = "left" | "right" | "center";

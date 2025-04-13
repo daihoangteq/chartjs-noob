@@ -7,6 +7,7 @@ import {
   renderTooltip,
   renderTooltipContent,
 } from "../utils";
+import { handleBaseDrawPlugin } from "../utils/plugin-base";
 
 const customContent = (
   x: number,
@@ -43,39 +44,22 @@ const useDrawAllTooltip = () => {
       id: "drawAllToolTip",
       afterDraw: (chart: Chart) => {
         const { data: dataExpense } = chart.getDatasetMeta(1);
-        const { data: dataIncome } = chart.getDatasetMeta(2);
-        const { data: dataAsset } = chart.getDatasetMeta(0);
-        
-        const idChart = chartContext?.idChart || ""
-        if(!idChart) return;
-        const containerOfTooltip = document.getElementById(`${idChart}`) as HTMLDivElement;
+        const idChart = chartContext?.idChart || "";
+        if (!idChart) return;
+        const containerOfTooltip = document.getElementById(idChart) as HTMLDivElement;
         dataExpense.forEach((_, index) => {
-          const y = Math.min(dataExpense[index].y, dataIncome[index].y);
-          const yMax = Math.max(dataExpense[index].y, dataIncome[index].y)
-          const yAsset = dataAsset[index].y || y;
-          
-          const x = (dataExpense[index].x + dataIncome[index].x) / 2;
           const imgCategory = chartContext?.data[index].category || [];
-          const positionOfTooltip = calculatePositionOfTooltip({
-            baseX: x,
-            baseY: y,
-            numberOfImg: imgCategory.length,
-            sizeOfContainer: containerOfTooltip.clientHeight,
-            forceCenter: {
-              yMax: yMax,
-              yAsset: yAsset
-            }
-          })
+          const {x, y} = handleBaseDrawPlugin({activeIndex: index, chart, containerTooltip: containerOfTooltip, idChart, imgCategory, forceCenter: true})
           customContent(
-            positionOfTooltip.x,
-            positionOfTooltip.y,
-            `${index}`,
+            x,
+            y,
+            String(index),
             imgCategory,
-            idChart || "",
+            idChart,
             containerOfTooltip
           );
         });
-      },
+      }
     };
   }, [chartContext]);
   return { drawAllToolTip };

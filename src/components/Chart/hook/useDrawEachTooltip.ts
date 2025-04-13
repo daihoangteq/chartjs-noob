@@ -1,24 +1,30 @@
 import { Chart, Plugin } from "chart.js";
 import { useContext, useMemo } from "react";
 import { Context } from "./useContextChart";
-import { IPropsChart } from "../type";
-import { renderTooltip, renderTooltipContent } from "../utils";
+import { IPropsChart, ALIGNMENT_OF_TOOLTIP } from "../type";
+import {
+  calculatePositionOfTooltip,
+  renderTooltip,
+  renderTooltipContent,
+} from "../utils";
+import { handleBaseDrawPlugin } from "../utils/plugin-base";
 
 const customContent = (
   x: number,
   y: number,
   imgCategory: string[],
-  idChart: IPropsChart["idChart"]
+  idChart: IPropsChart["idChart"],
+  containerTooltip: HTMLDivElement,
+  alignment: ALIGNMENT_OF_TOOLTIP
 ) => {
   if (!idChart || !Array.isArray(imgCategory) || imgCategory.length === 0)
     return;
-  const tooltipEl = document.getElementById(`${idChart}`);
-  if (tooltipEl) {
-    const tableBody = renderTooltipContent(imgCategory);
-    const currentLabel = (tooltipEl as HTMLDivElement).querySelector(
+  if (containerTooltip) {
+    const tableBody = renderTooltipContent(imgCategory, alignment);
+    const currentLabel = (containerTooltip as HTMLDivElement).querySelector(
       `.tooltip-label-${idChart}`
     ) as HTMLDivElement;
-    if (tooltipEl) {
+    if (containerTooltip) {
       if (currentLabel) {
         currentLabel.style.left = x + "px";
         currentLabel.style.top = y + "px";
@@ -27,7 +33,7 @@ const customContent = (
       }
       const newItem = renderTooltip(tableBody, x, y);
       newItem.classList.add(`tooltip-label-${idChart}`);
-      tooltipEl.appendChild(newItem);
+      containerTooltip.appendChild(newItem);
     }
   }
 };
@@ -38,19 +44,21 @@ const useDrawEachTooltip = () => {
     return {
       id: "drawEachTooltip",
       afterDatasetDraw: (chart: Chart) => {
-        const { data: dataExpense } = chart.getDatasetMeta(1);
+        const idChart = chartContext?.idChart;
+        if (!idChart) return;
         const { data: dataIncome } = chart.getDatasetMeta(2);
+        const tooltipEl = document.getElementById(idChart) as HTMLDivElement;
         const currentActive = dataIncome.findIndex((item) => item.active);
         if (currentActive < 0) return;
-        const y = Math.min(
-          dataExpense[currentActive].y,
-          dataIncome[currentActive].y
-        );
-        const x =
-          (dataExpense[currentActive].x + dataIncome[currentActive].x) / 2;
         const imgCategory = chartContext?.data[currentActive].category || [];
-        // 15 is triangle height
-        customContent(x, y - 15, imgCategory, chartContext?.idChart || "");
+        const { x, y, alignment } = handleBaseDrawPlugin({
+          chart,
+          idChart,
+          activeIndex: currentActive,
+          containerTooltip: tooltipEl,
+          imgCategory: imgCategory,
+        });
+        customContent(x, y, imgCategory, idChart, tooltipEl, alignment);
       },
     };
   }, [chartContext]);

@@ -57,7 +57,15 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
   const options = useMemo((): ChartOptions<ChartType> => {
     if (!chart || !chart.data || !Array.isArray(chart.data)) return {};
     const data = chart.data;
+    const propertyTickYAxis = calculateDualYAxisTicks(
+      [
+        ...data.map((item) => item.income),
+        ...data.map((item) => item.expenses),
+      ],
+      data.map((item) => item.assets)
+    )
     return {
+      events: ['click'],
       responsive: true,
       animation: false,
       maintainAspectRatio: false,
@@ -102,13 +110,7 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
           beginAtZero: true,
           display: position === "left" ? false : true,
           min: 0,
-          max: calculateDualYAxisTicks(
-            [
-              ...data.map((item) => item.income),
-              ...data.map((item) => item.expenses),
-            ],
-            data.map((item) => item.assets)
-          ).leftAxis.max,
+          max: propertyTickYAxis.leftAxis.max,
           grid: {
             display: position === "center" ? true : false,
             drawTicks: false,
@@ -124,13 +126,7 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
             font: {
               size: 12,
             },
-            stepSize: calculateDualYAxisTicks(
-              [
-                ...data.map((item) => item.income),
-                ...data.map((item) => item.expenses),
-              ],
-              data.map((item) => item.assets)
-            ).leftAxis.stepSize,
+            stepSize: propertyTickYAxis.leftAxis.stepSize,
           },
         },
         y1: {
@@ -142,13 +138,7 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
             display: false,
           },
           min: 0,
-          max: calculateDualYAxisTicks(
-            [
-              ...data.map((item) => item.income),
-              ...data.map((item) => item.expenses),
-            ],
-            data.map((item) => item.assets)
-          ).rightAxis.max,
+          max: propertyTickYAxis.rightAxis.max,
           grid: {
             display: false,
             drawBorder: false,
@@ -160,13 +150,7 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
             font: {
               size: 12,
             },
-            stepSize: calculateDualYAxisTicks(
-              [
-                ...data.map((item) => item.income),
-                ...data.map((item) => item.expenses),
-              ],
-              data.map((item) => item.assets)
-            ).rightAxis.stepSize,
+            stepSize: propertyTickYAxis.rightAxis.stepSize,
             padding: 10,
             callback: function (value) {
               return value;
