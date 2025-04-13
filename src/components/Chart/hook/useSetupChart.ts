@@ -29,7 +29,7 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
         {
           type: "bar" as const,
           label: "支出",
-          data: data.map((item) => item.expenses),
+          data: data.map((item) => item.income),
           backgroundColor: "#00C75D",
           yAxisID: "y",
           categoryPercentage: 0.6,
@@ -41,7 +41,7 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
         {
           type: "bar" as const,
           label: "収入",
-          data: data.map((item) => item.income),
+          data: data.map((item) => item.expenses),
           backgroundColor: "#56CCF2",
           yAxisID: "y",
           categoryPercentage: 0.6,
@@ -59,6 +59,7 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
     const data = chart.data;
     return {
       responsive: true,
+      animation: false,
       maintainAspectRatio: false,
       borderColor: "#F7374F",
       interaction: {

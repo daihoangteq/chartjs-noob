@@ -1,7 +1,128 @@
+import { BASE_GAP_OF_CONTENT_TOOLTIP, BASE_PADDING_X_OF_CONTENT_TOOLTIP, BASE_PADDING_Y_OF_CONTENT_TOOLTIP, BASE_SIZE_ITEM_OF_TOOLTIP, BASE_WIDTH_OF_TOOLTIP } from "../constant";
 import { FinancialData } from "../type";
 
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+const getTicksGap = (
+  unroundedTickSize: number,
+  minRaw: number,
+  baseUnit: number,
+  newDataYMax: number,
+) => {
+  let x = Math.floor(Math.log10(unroundedTickSize));
+  const deltaSteps: number[] = [
+    0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.9, 1,
+  ];
+  let roundedTickRange = unroundedTickSize;
+
+  // Find a valid rounded tick range
+  loop1: do {
+    const pow10x = Math.pow(10, x);
+    let temp = unroundedTickSize / pow10x;
+    const tempFloor = Math.floor(temp);
+    let deltaTemp = temp - tempFloor;
+
+    // Adjust deltaTemp based on predefined steps
+    if (deltaTemp > 0) {
+      for (const delta of deltaSteps) {
+        if (deltaTemp < delta) {
+          deltaTemp = delta;
+          break;
+        }
+      }
+    }
+
+    temp = tempFloor + deltaTemp;
+    roundedTickRange = temp * pow10x;
+
+    const firstLabel =
+      (Math.floor(minRaw / roundedTickRange) - 1) * roundedTickRange; // Ensure this is less than dataYMin
+    const lastLabel = firstLabel + baseUnit * roundedTickRange;
+
+    if (lastLabel <= newDataYMax * 1.2 && lastLabel >= newDataYMax) {
+      break loop1; // Valid tick range found
+    }
+
+    x--;
+  } while (x > 0);
+  const ticks = [];
+  const gap = roundedTickRange;
+  const firstLabel = Math.floor(minRaw / gap) * gap; // Ensure this is less than dataYMin
+  ticks.push(firstLabel);
+  let nextLabel = firstLabel;
+  for (let index = 1; index <= baseUnit; index++) {
+    nextLabel += gap;
+    ticks.push(nextLabel);
+  }
+  return {
+    ticks,
+    gap: gap,
+  };
+};
+export const getTickValueYAxis = (
+  dataYMin: number,
+  dataYMax: number,
+  countTickLimit = 5,
+): {
+  ticks: number[];
+  dataYMinProcessed: number;
+  dataYMaxProcessed: number;
+  gap: number;
+} => {
+  const yMin = !isFinite(dataYMin) ? 0 : dataYMin;
+  const yMax = !isFinite(dataYMax) ? yMin : dataYMax;
+  const baseUnit = countTickLimit - 1; // 5 is default
+  let minRaw = yMin === yMax ? 0 : yMin;
+  let maxRaw = Math.max(0, yMax);
+  let roundNum = 1;
+  if (maxRaw - minRaw >= 10_0000 * 10) {
+    roundNum = 10_0000;
+  } else if (maxRaw - minRaw >= 1_0000 * 20) {
+    roundNum = 5_0000;
+  } else if (maxRaw - minRaw >= 1_0000) {
+    roundNum = 1_0000;
+  } else if (maxRaw - minRaw >= 1000) {
+    roundNum = 100;
+  }
+  minRaw = Math.floor(minRaw / roundNum);
+  maxRaw = Math.ceil(maxRaw / roundNum);
+  const unbufferedRange = maxRaw - minRaw;
+  const bufferLabel = unbufferedRange / (baseUnit + 1);
+  const newDataYMax = maxRaw + bufferLabel;
+  const range = unbufferedRange + bufferLabel;
+
+  // Calculate initial tick size
+  const unroundedTickSize = Math.round(range / baseUnit) || 1;
+  let { ticks, gap } = getTicksGap(
+    unroundedTickSize,
+    minRaw,
+    baseUnit,
+    newDataYMax,
+  );
+  const dataYMaxProcessed = ticks[baseUnit];
+  if (maxRaw > dataYMaxProcessed) {
+    const buffer = maxRaw - dataYMaxProcessed;
+    ticks = ticks.map((tick, index) => tick + index * buffer);
+    gap = gap + buffer;
+  }
+
+  ticks = ticks.map((tick) => Math.round(tick * roundNum));
+  gap = Math.round(gap * roundNum);
+  if (gap % 10_0000 !== 0 && roundNum === 10_0000) {
+    gap = gap + 5_0000;
+  }
+  if (ticks[0] % 10_0000 !== 0 && roundNum === 10_0000) {
+    ticks[0] = Math.max(ticks[0] - 5_0000, 0);
+    ticks = ticks.map((_, index) => ticks[0] + index * gap);
+  }
+  return {
+    ticks: ticks,
+    dataYMinProcessed: ticks[0],
+    dataYMaxProcessed: ticks[baseUnit],
+    gap,
+  };
 };
 
 export function calculateDualYAxisTicks(
@@ -11,63 +132,22 @@ export function calculateDualYAxisTicks(
   function calculateNiceScale(data: number[]) {
     // Get max value from data
     const maxValue = Math.max(...data.filter((val) => !isNaN(val)));
-    const roundUpToNice = (num: number) => {
-      const power = Math.floor(Math.log10(num));
-      const base = Math.pow(10, power);
-      // Adjusted multipliers to handle larger numbers better
-      if (num <= base * 2) return base * 2;
-      if (num <= base * 5) return base * 5;
-      if (num <= base * 10) return base * 10;
-      return base * 20;
-    };
-
-    let niceMax = roundUpToNice(maxValue);
-    // Ensure niceMax is always greater than maxValue
-    while (niceMax <= maxValue) {
-      niceMax = roundUpToNice(niceMax + 1);
-    }
-
-    let stepSize = niceMax / 7; // 7 intervals for 8 ticks
-
-    // Round stepSize to nice number
-    const stepPower = Math.floor(Math.log10(stepSize));
-    const stepBase = Math.pow(10, stepPower);
-
-    if (stepSize <= stepBase * 1) stepSize = stepBase;
-    else if (stepSize <= stepBase * 1.5) stepSize = stepBase * 1.5;
-    else if (stepSize <= stepBase * 2) stepSize = stepBase * 2;
-    else if (stepSize <= stepBase * 2.5) stepSize = stepBase * 2.5;
-    else if (stepSize <= stepBase * 3) stepSize = stepBase * 3;
-    else if (stepSize <= stepBase * 4) stepSize = stepBase * 4;
-    else if (stepSize <= stepBase * 5) stepSize = stepBase * 5;
-    else stepSize = stepBase * 10;
-
-    // Generate exactly 8 ticks
-    const ticks = [];
-    for (let i = 0; i <= niceMax && ticks.length < 8; i += stepSize) {
-      ticks.push(i);
-    }
-
-    while (ticks.length < 8) {
-      ticks.push(ticks[ticks.length - 1] + stepSize);
-    }
-
-    if (ticks.length > 8) {
-      ticks.splice(8);
-    }
+    const {dataYMaxProcessed, dataYMinProcessed, gap, ticks} =getTickValueYAxis(0, maxValue, 8)
+ 
     return {
       ticks,
-      stepSize,
-      min: 0,
-      max: ticks[ticks.length - 1],
+      stepSize: gap,
+      min: dataYMinProcessed,
+      max: dataYMaxProcessed,
     };
   }
-
-  return {
+  const dataReturn =  {
     leftAxis: calculateNiceScale(leftAxisData),
     rightAxis: calculateNiceScale(rightAxisData),
   };
+  return dataReturn;
 }
+
 
 export const renderTooltipContent = (imgCategory: FinancialData["category"]) => {
   const tableBody = `
@@ -78,8 +158,7 @@ export const renderTooltipContent = (imgCategory: FinancialData["category"]) => 
         flex-direction: column;
         position: relative;
         width: 32px;
-        gap: 4px;
-        padding: 4px;
+        padding: ${BASE_PADDING_Y_OF_CONTENT_TOOLTIP}px ${BASE_PADDING_X_OF_CONTENT_TOOLTIP}px;
         border-radius: 20px;
       "
     >
@@ -89,10 +168,11 @@ export const renderTooltipContent = (imgCategory: FinancialData["category"]) => 
       <img
           src="${item}"
           style="
-              width: 24px;
-              height: 24px;
+              width: ${BASE_SIZE_ITEM_OF_TOOLTIP}px;
+              height: ${BASE_SIZE_ITEM_OF_TOOLTIP}px;
               object-fit: cover;
               border-radius: 50%;
+              margin: ${BASE_GAP_OF_CONTENT_TOOLTIP}px 0px;
           "
           alt="icon"
       />
@@ -136,4 +216,29 @@ export const renderTooltip = (content: string, x: number, y: number): HTMLDivEle
   newItem.style.pointerEvents = "none";
   newItem.style.transform = "translate(-50%, -100%)";
   return newItem
+}
+
+export const calculatePositionOfTooltip = (props :{baseX: number, baseY: number, numberOfImg: number, sizeOfContainer: number, forceCenter?: {yMax: number, yAsset: number}} )=> {
+  const {baseX, baseY, numberOfImg, sizeOfContainer, forceCenter} = props
+  let x = baseX;
+  let y = baseY;
+  const heightOfTooltip = numberOfImg * BASE_SIZE_ITEM_OF_TOOLTIP + BASE_PADDING_Y_OF_CONTENT_TOOLTIP * 2 + BASE_GAP_OF_CONTENT_TOOLTIP * numberOfImg * 2
+  if(y - heightOfTooltip <= 0) {
+    y = y + heightOfTooltip + 20; // the triangle
+    if(forceCenter) {
+      const isHideAsset= y > forceCenter.yAsset;
+      console.log({isHideAsset});
+      
+      y =  isHideAsset ? forceCenter.yMax + heightOfTooltip + 20 : y 
+    }
+  }else {
+    y = y - 10; // padding
+  }
+  const dataReturn = {
+    x,
+    y
+  }
+  return dataReturn;
+  // console.log({heightOfTooltip});
+  // console.dir(props);
 }

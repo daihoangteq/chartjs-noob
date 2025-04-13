@@ -31,7 +31,7 @@ export function calculateDualYAxisTicks(
     const roundUpToNice = (num: number) => {
       const power = Math.floor(Math.log10(num));
       const base = Math.pow(10, power);
-      // console.log({ power, base, num });
+      console.log({ power, base, num });
 
       // Adjusted multipliers to handle larger numbers better
       if (num <= base * 2) return base * 2;
@@ -41,15 +41,15 @@ export function calculateDualYAxisTicks(
     };
 
     let niceMax = roundUpToNice(maxValue);
-    // console.log({ niceMax });
+    console.log({ niceMax });
 
     // Ensure niceMax is always greater than maxValue
     while (niceMax <= maxValue) {
-      niceMax = roundUpToNice(niceMax + 1);
+      niceMax = roundUpToNice(niceMax + 1000);
     }
 
     let stepSize = niceMax / 7; // 7 intervals for 8 ticks
-
+    console.log({ stepSize });
     // Round stepSize to nice number
     const stepPower = Math.floor(Math.log10(stepSize));
     const stepBase = Math.pow(10, stepPower);
@@ -104,8 +104,8 @@ export function calculateDualYAxisTicks(
 
 // Example data
 export const sampleData1: FinancialData[] = [
-  { age: 10, income: 1200, expenses: 1000, assets: 2000, category: [imgPath] },
-  { age: 20, income: 1200, expenses: 1000, assets: 2000, category: [imgPath] },
+  { age: 10, income: 500000, expenses: 680000, assets: 2000, category: [imgPath, imgPath] },
+  { age: 20, income: 500000, expenses: 680000, assets: 2000, category: [imgPath] },
   { age: 30, income: 12020, expenses: 1000, assets: 2000, category: [imgPath] },
   { age: 40, income: 800, expenses: 800, assets: 1000, category: [imgPath] },
   { age: 50, income: 1230, expenses: 500, assets: 2000, category: [imgPath] },
@@ -113,9 +113,9 @@ export const sampleData1: FinancialData[] = [
   {
     age: 70,
     income: 100000,
-    expenses: 690000,
+    expenses: 680000,
     assets: 10000,
-    category: [imgPath],
+    category: [imgPath, imgPath, imgPath],
   },
   { age: 80, income: 548, expenses: 9000, assets: 5000, category: [imgPath] },
   { age: 90, income: 1000, expenses: 1020, assets: 2000, category: [imgPath] },
@@ -134,7 +134,7 @@ export const sampleData2: FinancialData[] = [
   { age: 50, income: 1000, expenses: 700, assets: 2000, category: [imgPath] },
   { age: 60, income: 900, expenses: 600, assets: 3500, category: [imgPath] },
   { age: 70, income: 700, expenses: 500, assets: 4500, category: [imgPath] },
-  { age: 80, income: 500, expenses: 400, assets: 5000, category: [imgPath] },
+  { age: 80, income: 500, expenses: 400, assets: 500000, category: [imgPath] },
   { age: 90, income: 500, expenses: 400, assets: 5000, category: [imgPath] },
   { age: 100, income: 500, expenses: 400, assets: 5000, category: [imgPath] },
 ];
@@ -425,8 +425,37 @@ export const sampleDataRandom: FinancialData[] = Array.from(
     ), // Fixed category
   })
 );
-
-export const sampleData = sampleData5;
+export const sampleDataRandom2: FinancialData[] = Array.from(
+  { length: 20 },
+  () => ({
+    age: Math.floor(Math.random() * 60) + 18, // Tuổi từ 18-77
+    income: Math.floor(Math.random() * 8000) + 2000, // Thu nhập từ 2000-9999
+    expenses: Math.floor(Math.random() * 8000) + 2000, // Chi phí từ 1000-6999
+    assets: Math.floor(Math.random() * 50000) + 10000, // Tài sản từ 10000-59999
+    category: Array.from(
+      { length: Math.floor(Math.random() * 3) + 1 }, // Độ dài array từ 1-3
+      () => imgPath
+    ),
+  })
+);
+export const sampleData13: FinancialData[] = [
+  { age: 30, income: 3000, expenses: 2000, assets: 10000, category: [imgPath] },
+  { age: 31, income: 3200, expenses: 2100, assets: 12000, category: [imgPath] },
+  { age: 32, income: 3400, expenses: 2200, assets: 14000, category: [imgPath] },
+  { age: 33, income: 3600, expenses: 2300, assets: 16000, category: [imgPath] },
+  { age: 34, income: 3800, expenses: 2400, assets: 18000, category: [imgPath] },
+  { age: 35, income: 4000, expenses: 2500, assets: 20000, category: [imgPath] },
+  { age: 36, income: 4200, expenses: 2600, assets: 23000, category: [imgPath] },
+  { age: 37, income: 4400, expenses: 2700, assets: 26000, category: [imgPath] },
+  { age: 38, income: 4600, expenses: 2800, assets: 29000, category: [imgPath, imgPath, imgPath] },
+  { age: 39, income: 4800, expenses: 2900, assets: 32000, category: [imgPath] },
+  { age: 40, income: 5000, expenses: 3000, assets: 35000, category: [imgPath] },
+  { age: 41, income: 5200, expenses: 3100, assets: 38000, category: [imgPath] },
+  { age: 42, income: 5400, expenses: 3200, assets: 41000, category: [imgPath] },
+  { age: 43, income: 5600, expenses: 3300, assets: 44000, category: [imgPath] },
+  { age: 44, income: 3400, expenses: 5800, assets: 40000, category: [imgPath, imgPath, imgPath] },
+];
+export const sampleData = sampleData13;
 
 // const leftAxisData = [
 //   ...sampleData.map((item) => item.income),

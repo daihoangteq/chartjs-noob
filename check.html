@@ -22,12 +22,13 @@
         align-items: center;
       "
     >
-      <div style="position: relative; border-radius: 20px; background-color: white; filter: drop-shadow();">
+      <div style="position: relative; border-radius: 20px; background-color: white; filter:drop-shadow(0px 2px 6px #00000040);">
         <div
           style="
             display: flex;
             flex-direction: column;
             position: relative;
+            z-index: 1;
             width: 32px;
             gap: 4px;
             padding: 4px;
@@ -67,10 +68,12 @@
         </div>
         <div
           style="
-            top: 100%;
-            left: 50%;
-            transform: translate(-50%, -30%);
+            top: 50%;
+            left: 100%;
             position: absolute;
+            transform: translate(50%, -50%);
+            rotate: -90deg;
+            z-index: 0;
           "
         >
           <svg
