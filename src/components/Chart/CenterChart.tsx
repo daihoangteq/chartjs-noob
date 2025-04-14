@@ -3,10 +3,10 @@ import { Context } from "./hook/useContextChart";
 import useCalculateChartWidth from "./hook/useCalculateChartWidth";
 import { Bar } from "react-chartjs-2";
 import useSetupChart from "./hook/useSetupChart";
-import useDrawAllTooltip from "./hook/useDrawAllTooltip";
+import useDrawAllTooltip from "./hook/plugins/useDrawAllTooltip";
 import { Plugin } from "chart.js";
-import useDrawEachTooltip from "./hook/useDrawEachTooltip";
-import useDynamicTooltips from "./hook/useDynamicTooltips";
+import useDrawEachTooltip from "./hook/plugins/useDrawEachTooltip";
+import useDynamicTooltips from "./hook/plugins/useDynamicTooltips";
 
 const CenterChart = () => {
   const { drawAllToolTip } = useDrawAllTooltip();

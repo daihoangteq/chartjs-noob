@@ -454,7 +454,7 @@ export const sampleData13: FinancialData[] = [
   { age: 43, income: 5600, expenses: 3300, assets: 44000, category: [imgPath] },
   { age: 44, income: 3400, expenses: 5800, assets: 40000, category: [imgPath, imgPath, imgPath] },
 ];
-export const sampleData = sampleData1;
+export const sampleData = sampleDataRandom2;
 
 // const leftAxisData = [
 //   ...sampleData.map((item) => item.income),

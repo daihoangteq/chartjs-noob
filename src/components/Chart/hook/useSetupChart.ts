@@ -90,6 +90,8 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
             display: position === "center" ? true : false,
             drawOnChartArea: position === "center" ? false : true,
             offset: false,
+            z: 1,
+            borderColor:"#E5E5EA"
           },
           ticks: {
             color: "#666",
@@ -118,6 +120,7 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
             color: "#E4E4E4",
             borderDash: [4, 4],
             tickColor: "transparent",
+            z: 0,
           },
           ticks: {
             display: position === "center" ? false : true,

@@ -1,14 +1,11 @@
 import { Chart, Plugin } from "chart.js";
 import React, { useContext, useMemo } from "react";
-import { Context } from "./useContextChart";
-import { ALIGNMENT_OF_TOOLTIP, IPropsChart } from "../type";
-import {
-  calculatePositionOfTooltip,
-  renderTooltip,
-  renderTooltipContent,
-} from "../utils";
-import { BASE_HEIGH_OF_TRIANGLE } from "../constant";
-import { handleBaseDrawPlugin } from "../utils/plugin-base";
+import { ALIGNMENT_OF_TOOLTIP, IPropsChart } from "../../type";
+import { renderTooltip, renderTooltipContent } from "../../utils";
+import { Context } from "../useContextChart";
+import { handleBaseDrawPlugin } from "../../utils/plugin-base";
+
+
 
 const customContent = (props: {
   x: number;
