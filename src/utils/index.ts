@@ -104,7 +104,7 @@ export function calculateDualYAxisTicks(
 
 // Example data
 export const sampleData1: FinancialData[] = [
-  { age: 10, income: 500000, expenses: 680000, assets: 2000, category: [imgPath, imgPath] },
+  { age: 10, income: 5000000, expenses: 6800000, assets: 2000, category: [imgPath, imgPath] },
   { age: 20, income: 500000, expenses: 680000, assets: 2000, category: [imgPath] },
   { age: 30, income: 12020, expenses: 1000, assets: 2000, category: [imgPath] },
   { age: 40, income: 800, expenses: 800, assets: 1000, category: [imgPath] },
@@ -122,7 +122,7 @@ export const sampleData1: FinancialData[] = [
   {
     age: 100,
     income: 500000, expenses: 680000,
-    assets: 500000,
+    assets: 5000,
     category: [imgPath, imgPath, imgPath],
   },
 ];
@@ -425,12 +425,12 @@ export const sampleDataRandom: FinancialData[] = Array.from(
   })
 );
 export const sampleDataRandom2: FinancialData[] = Array.from(
-  { length: 20 },
+  { length: 10 },
   () => ({
     age: Math.floor(Math.random() * 60) + 18, // Tuổi từ 18-77
-    income: Math.floor(Math.random() * 8000) + 2000, // Thu nhập từ 2000-9999
-    expenses: Math.floor(Math.random() * 8000) + 2000, // Chi phí từ 1000-6999
-    assets: Math.floor(Math.random() * 50000) + 10000, // Tài sản từ 10000-59999
+    income: Math.floor(Math.random() * 80400) + 60003, // Thu nhập từ 2000-9999
+    expenses: Math.floor(Math.random() * 60003) + 2001, // Chi phí từ 1000-6999
+    assets: Math.floor(Math.random() * 3003) + 1003, // Tài sản từ 10000-59999
     category: Array.from(
       { length: Math.floor(Math.random() * 3) + 1 }, // Độ dài array từ 1-3
       () => imgPath
@@ -454,7 +454,7 @@ export const sampleData13: FinancialData[] = [
   { age: 43, income: 5600, expenses: 3300, assets: 44000, category: [imgPath] },
   { age: 44, income: 3400, expenses: 5800, assets: 40000, category: [imgPath, imgPath, imgPath] },
 ];
-export const sampleData = sampleDataRandom2;
+export const sampleData = sampleData1;
 
 // const leftAxisData = [
 //   ...sampleData.map((item) => item.income),
