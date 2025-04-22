@@ -29,7 +29,7 @@ const useRoundedLabels = (position: CHART_INGREDIENTS) => {
         chart.canvas.style.width = widthOfChart + "px";
         Chart.updateSizeChart(position, widthOfChart + "px");
         yAxis.ticks.forEach((tick, index) => {
-          if (position === "right" && index === 0) return;
+          // if (position === "right" && index === 0) return;
           const tickLabel = yAxis.getLabelForValue(tick.value);
           // Calculate text width
           const textMetrics = ctx.measureText(tickLabel);

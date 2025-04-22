@@ -31,16 +31,37 @@ export const getTickValueYAxis = (
     };
   }
 
-  let step = Math.ceil(dataYMax / 6.5);
-  
+  // Tính range và step dựa trên range
+  let range = dataYMax - dataYMin;
+  let step = Math.floor(range / 6.5);
+
+  // Làm tròn step dựa vào giá trị của step
   step = Math.ceil(step / 100) * 100;
 
-  const ticks: number[] = [];
-  let currentTick = 0;
+  // Tính toán roundedMin sau khi đã có step chính xác
+  const roundedMin = Math.floor(dataYMin / step) * step
 
+  const ticks: number[] = [];
+  let currentTick = roundedMin;
+
+  // Tạo đúng 8 ticks
   for (let i = 0; i < 8; i++) {
     ticks.push(currentTick);
     currentTick += step;
+  }
+
+  // Kiểm tra xem max có nằm trong khoảng tick 7-8 không
+  // Nếu không, điều chỉnh step
+  if (dataYMax <= ticks[6] || dataYMax >= ticks[7]) {
+    step = Math.ceil(dataYMax / 6.5 / 100) * 100;
+    
+    // Tạo lại ticks với step mới
+    ticks.length = 0;
+    currentTick = roundedMin;
+    for (let i = 0; i < 8; i++) {
+      ticks.push(currentTick);
+      currentTick += step;
+    }
   }
 
   return {
@@ -58,9 +79,7 @@ export const getTickValueYAxis = (
   //   };
   // }
 
-
   // let step = Math.ceil(dataYMax / 6.5);
-
 
   // const pow = Math.floor(Math.log10(step));
   // const base = Math.pow(10, pow);
@@ -74,7 +93,6 @@ export const getTickValueYAxis = (
   // const roundedMin = 0;
   // const ticks: number[] = [];
   // let currentTick = roundedMin;
-
 
   // for (let i = 0; i < 8; i++) {
   //   ticks.push(currentTick);
@@ -95,9 +113,19 @@ export function calculateDualYAxisTicks(
 ) {
   function calculateNiceScale(data: number[]) {
     // Get max value from data
+    if (!Array.isArray(data) || !data.length) {
+      return {
+        ticks: [0, 100, 200, 300, 400, 500, 600, 700],
+        stepSize: 100,
+        min: 0,
+        max: 700,
+      };
+    }
     const maxValue = Math.max(...data.filter((val) => !isNaN(val)));
+    const minValue = Math.min(...data.filter((val) => !isNaN(val)));
+    console.log({ minValue });
     const { dataYMaxProcessed, dataYMinProcessed, gap, ticks } =
-      getTickValueYAxis(0, maxValue, 8);
+      getTickValueYAxis(minValue, maxValue, 8);
     console.log({
       ticks,
       stepSize: gap,

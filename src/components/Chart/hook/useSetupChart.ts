@@ -109,9 +109,8 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
           },
         },
         y: {
-          beginAtZero: true,
           display: position === "left" ? false : true,
-          min: 0,
+          min: propertyTickYAxis.leftAxis.min,
           max: propertyTickYAxis.leftAxis.max,
           grid: {
             display: position === "center" ? true : false,
@@ -124,7 +123,6 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
           },
           ticks: {
             display: position === "center" ? false : true,
-            maxTicksLimit: 8,
             color: "#666",
             font: {
               size: 12,
@@ -133,14 +131,13 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
           },
         },
         y1: {
-          beginAtZero: true,
           // type: "linear" as const,
           display: position === "left" ? false : true,
           position: "right" as const,
           title: {
             display: false,
           },
-          min: 0,
+          min: propertyTickYAxis.rightAxis.min,
           max: propertyTickYAxis.rightAxis.max,
           grid: {
             display: false,
@@ -154,10 +151,6 @@ const useSetupChart = (position: CHART_INGREDIENTS) => {
               size: 12,
             },
             stepSize: propertyTickYAxis.rightAxis.stepSize,
-            padding: 10,
-            callback: function (value) {
-              return value;
-            },
           },
         },
       },

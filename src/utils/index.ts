@@ -428,9 +428,9 @@ export const sampleDataRandom2: FinancialData[] = Array.from(
   { length: 10 },
   () => ({
     age: Math.floor(Math.random() * 60) + 18, // Tuổi từ 18-77
-    income: Math.floor(Math.random() * 80400) + 60003, // Thu nhập từ 2000-9999
-    expenses: Math.floor(Math.random() * 60003) + 2001, // Chi phí từ 1000-6999
-    assets: Math.floor(Math.random() * 3003) + 1003, // Tài sản từ 10000-59999
+    income: Math.floor(Math.random() * 8040) + 2001, // Thu nhập từ 2000-9999
+    expenses: Math.floor(Math.random() * 6003) + 2001, // Chi phí từ 1000-6999
+    assets: Math.floor(Math.random() * 3003) + 2003, // Tài sản từ 10000-59999
     category: Array.from(
       { length: Math.floor(Math.random() * 3) + 1 }, // Độ dài array từ 1-3
       () => imgPath
@@ -454,7 +454,7 @@ export const sampleData13: FinancialData[] = [
   { age: 43, income: 5600, expenses: 3300, assets: 44000, category: [imgPath] },
   { age: 44, income: 3400, expenses: 5800, assets: 40000, category: [imgPath, imgPath, imgPath] },
 ];
-export const sampleData = sampleData1;
+export const sampleData = sampleDataRandom;
 
 // const leftAxisData = [
 //   ...sampleData.map((item) => item.income),
